@@ -6,6 +6,9 @@ export default function IndexPage() {
       {/*  */}
       {/*  */}
       {/*  */}
+      123 123
     </div>
   );
 }
+
+//

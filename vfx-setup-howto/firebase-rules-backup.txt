@@ -1,0 +1,35 @@
+
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    //
+		//
+    "profile": {
+      "$owner_user_id": {
+        "canvas": {
+          ".read": "auth !== null",
+          "$canvasID": {
+            ".write": "auth !== null && auth.uid === $owner_user_id",
+            "shareACL": {
+              ".write": "auth !== null && auth.uid === $owner_user_id",
+            },
+            "ownerACL": {
+              ".write": "auth !== null && auth.uid === $owner_user_id",
+            }
+          },
+        }
+      }
+    },
+
+    //
+    //
+    "canvas": {
+      "$canvasID": {
+        ".read": true,
+        ".write": "auth !== null && root.child('profile').child(auth.uid).child('canvas').child('ownerACL').hasChild(auth.uid) || auth !== null && root.child('profile').child(auth.uid).child('canvas').child('ownerACL').hasChild(auth.uid) "
+      }
+    }
+  }
+}
