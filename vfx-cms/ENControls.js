@@ -24,13 +24,13 @@ export function ENControls() {
   }, [mapControls.current]);
 
   //
+  // ----- ----- ----- ----- -----
+  //
+
   // ENState.useReactiveKey("movementXY", () => {
   //   // console.log(ENState.movementXY);
   // });
-  //
 
-  //
-  //
   // useFrame(({ raycaster, mouse, camera }) => {
   //   raycaster.setFromCamera(mouse, camera);
   // });
@@ -45,9 +45,11 @@ export function ENControls() {
   //     return first.point;
   //   }
   // };
-  //
 
   //
+  //
+  //
+
   let syncCursor = () => {
     if (ENState.hovering === "floor") {
       if (ENState.cursorMode === "ready") {
