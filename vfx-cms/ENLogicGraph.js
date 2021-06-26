@@ -10,6 +10,8 @@ import { ENControls } from "./ENControls";
 import { ENCore } from "./ENBuildings";
 import { ENHDRI } from "./ENHDRI";
 import { useEffect } from "react";
+import { ENHtml } from "./ENHtmls";
+import { ENDisplayCursor } from "./ENDisplayCursor";
 
 export function ENLogicGraph() {
   let router = useRouter();
@@ -23,31 +25,17 @@ export function ENLogicGraph() {
       <Canvas
         dpr={(typeof window !== "undefined" && window.devicePixelRatio) || 1.0}
       >
+        {/*  */}
         <LogicContent></LogicContent>
       </Canvas>
 
       {/*  */}
-      <HTMLs></HTMLs>
+      <ENHtml></ENHtml>
     </div>
   );
 
   //
   // return <div>Canvas ID: {router.query.canvasID}</div>;
-}
-
-function HTMLs() {
-  ENState.makeKeyReactive("overlay");
-
-  return (
-    <>
-      {ENState.overlay === "main" && (
-        <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
-          {/*  */}
-          123
-        </div>
-      )}
-    </>
-  );
 }
 
 // ENState
@@ -70,6 +58,8 @@ function LogicContent() {
       <ENHDRI></ENHDRI>
 
       <ENCore></ENCore>
+
+      <ENDisplayCursor></ENDisplayCursor>
       {/* <Text color="#000000">Loading...</Text> */}
     </group>
   );

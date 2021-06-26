@@ -8,7 +8,7 @@ export function ENProjectAdd() {
     <div className="flex items-center justify-start">
       <textarea
         rows={1}
-        className="p-3 m-3 border  rounded-2xl resize-x"
+        className=" p-3 m-3 ml-0 border  rounded-2xl resize-x"
         value={title}
         onInput={(e) => {
           setTitle(e.target.value);

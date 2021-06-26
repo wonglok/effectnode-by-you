@@ -47,19 +47,40 @@ export function ENControls() {
   // };
   //
 
-  ENState.useReactiveKey("cursorMode", () => {
-    if (ENState.cursorMode === "ready") {
-      document.body.style.cursor = "grab";
-    } else if (ENState.cursorMode === "pan") {
-      document.body.style.cursor = "grabbing";
+  //
+  let syncCursor = () => {
+    if (ENState.hovering === "floor") {
+      if (ENState.cursorMode === "ready") {
+        document.body.style.cursor = "grab";
+      } else if (ENState.cursorMode === "pan") {
+        document.body.style.cursor = "grabbing";
+      } else if (ENState.cursorMode === "addCodeBlock") {
+        document.body.style.cursor = "crosshair";
+      }
+    } else if (ENState.hovering === "object") {
+      document.body.style.cursor = "pointer";
+    } else if (ENState.hovering === "overlay") {
+      document.body.style.cursor = "";
+    } else {
+      document.body.style.cursor = "";
     }
-  });
+  };
+  ENState.useReactiveKey("overlay", syncCursor);
+  ENState.useReactiveKey("cursorMode", syncCursor);
+  ENState.useReactiveKey("hovering", syncCursor);
 
   let eventsHandlers = {
     //
     onPointerDown: ({ point }) => {
       ENState.isDown = true;
-      ENState.cursorMode = "pan";
+      if (ENState.cursorMode === "ready") {
+        ENState.cursorMode = "pan";
+      }
+      if (ENState.cursorMode === "addCodeBlock") {
+        ENState.overlay = "";
+        ENState.cursorMode = "ready";
+        ENState.hovering = "floor";
+      }
     },
 
     //
@@ -72,6 +93,7 @@ export function ENControls() {
 
     //
     onPointerMove: (ev) => {
+      ENState.cursorAt.copy(ev.point);
       //
       // console.log(ev);
       // ENState.movementXY = {
@@ -83,6 +105,24 @@ export function ENControls() {
       // ENState.isDown = false;
     },
   };
+
+  useEffect(() => {
+    window.addEventListener(
+      "touchstart",
+      (ev) => {
+        ev.preventDefault();
+      },
+      { passive: false }
+    );
+
+    window.addEventListener(
+      "touchmove",
+      (ev) => {
+        ev.preventDefault();
+      },
+      { passive: false }
+    );
+  }, []);
 
   return (
     <group>

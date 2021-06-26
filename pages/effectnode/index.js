@@ -9,7 +9,7 @@ export default function Home() {
   //
   return (
     <LoginChecker>
-      <div>
+      <div className="p-3 lg:p-12">
         <ENWelcome></ENWelcome>
         <ENProjectAdd></ENProjectAdd>
         <ENProjectListing></ENProjectListing>

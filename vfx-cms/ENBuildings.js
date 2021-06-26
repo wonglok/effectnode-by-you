@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Color } from "three";
 import { MathUtils } from "three";
 import { ShaderCubeChrome } from "../vfx-library/ShaderCubeChrome";
+import { ENState } from "./ENState";
 
 //
 
@@ -66,15 +67,32 @@ export function Laptop({ ...props }) {
   return (
     <group
       raycast={meshBounds}
-      onPointerDown={() => {
-        console.log("down");
+      onPointerEnter={() => {
+        //
+        ENState.hovering = "object";
+      }}
+      onPointerLeave={() => {
+        //
+        ENState.hovering = "floor";
+      }}
+      //
+      onPointerDown={(e) => {
+        e.stopPropagation();
+        e.target.setPointerCapture(e.pointerId);
+      }}
+      onPointerUp={(e) => {
+        ENState.overlay = "main";
+        ENState.hovering = "overlay";
+
+        e.stopPropagation();
+        e.target.releasePointerCapture(e.pointerId);
       }}
       ref={group}
       {...props}
       dispose={null}
     >
       <pointLight position-x={0} position-z={-2} position-y={2}></pointLight>
-      <group rotation-x={-0.425 * 0.0} position={[0, -0.04, 0.41]}>
+      <group rotation-x={Math.PI * 0.0} position={[0, -0.04, 0.41]}>
         <group position={[0, 2.96, -0.13]} rotation={[Math.PI / 2, 0, 0]}>
           {/*  */}
           <mesh
@@ -94,10 +112,25 @@ export function Laptop({ ...props }) {
 
               <planeBufferGeometry args={[]}></planeBufferGeometry>
             </mesh> */}
-            <meshPhongMaterial map={rainbow.out.texture}></meshPhongMaterial>
+            <meshBasicMaterial map={rainbow.out.texture}></meshBasicMaterial>
             {/* <Text position={[0, 0.05, -0.09]}>123</Text> */}
           </mesh>
         </group>
+      </group>
+
+      <group position={[0, 3, 1]} rotation-x={Math.PI * -0.25}>
+        <Text
+          color={"#000000"}
+          fontSize={1.3}
+          maxWidth={200}
+          lineHeight={1}
+          textAlign={"center"}
+          font="/font/Cronos-Pro-Light_12448.ttf"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.04}
+          outlineColor="#ffffff"
+        >{`Click to start`}</Text>
       </group>
 
       {/*  */}

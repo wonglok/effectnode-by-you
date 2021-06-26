@@ -11,8 +11,9 @@ export const ENState = makeShallowStore({
   overlay: "",
 
   // position
-  movementXY: { x: 0, y: 0 },
   cursorMode: "ready",
+  hovering: "floor",
+
   cursorAt: new Vector3(),
   isDown: false,
 });

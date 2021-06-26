@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { ENState } from "./ENState";
 import { onReady } from "./firebase";
 import router from "next/router";
+
+//
 export function ENProjectListing() {
+  //
   ENState.makeKeyReactive("listing");
   ENState.makeKeyReactive("listingReload");
 
@@ -29,6 +32,7 @@ export function ENProjectListing() {
           }
         });
       };
+
       load();
       ENState.onChange("listingReload", () => {
         load();
@@ -38,14 +42,15 @@ export function ENProjectListing() {
 
   //
   return (
-    <div>
-      <div>Listing...</div>
-
+    <div className="w-full overflow-x-auto py-1">
       <table>
         <thead>
           <tr>
-            <th className="p-3 border ">Title</th>
-            <th className="p-3 border " colSpan={2}>
+            <th className="p-3 border  ">
+              <span className="w-24 inline-block"></span>Title{" "}
+              <span className="w-24 inline-block"></span>
+            </th>
+            <th className="p-3 border " colSpan={3}>
               Actions
             </th>
             {/* <th>JSON</th> */}
@@ -59,7 +64,38 @@ export function ENProjectListing() {
                 <td className="p-3 m-3 border bg-white ">{e.data.title}</td>
                 <td className="p-3 border m-0">
                   <button
-                    className=" p-3 px-6 rounded-full bg-blue-300"
+                    className=" p-3 px-6 rounded-full bg-yellow-500 text-white"
+                    onClick={() => {
+                      //
+                      let title = e.data.title || "no title";
+
+                      onReady().then(({ user, db }) => {
+                        let newTitle = window
+                          .prompt(
+                            `Type "${title}" to Confirm Removal, theres no restore.`,
+                            `${title}`
+                          )
+                          .trim();
+
+                        if (newTitle) {
+                          let listingRef = db.ref(
+                            `profile/${user.uid}/canvas/${e._id}/title`
+                          );
+                          listingRef.set(newTitle);
+
+                          e.data.title = newTitle;
+
+                          ENState.listingReload++;
+                        }
+                      });
+                    }}
+                  >
+                    Rename
+                  </button>
+                </td>
+                <td className="p-3 border m-0">
+                  <button
+                    className=" p-3 px-6 rounded-full bg-blue-500 text-white"
                     onClick={() => {
                       //
                       router.push(`/effectnode/editor/${e._id}`);
@@ -70,7 +106,7 @@ export function ENProjectListing() {
                 </td>
                 <td className="p-3 border">
                   <button
-                    className="  p-3 px-6 rounded-full bg-red-300"
+                    className="  p-3 px-6 rounded-full bg-red-500 text-white"
                     onClick={() => {
                       //
                       //
