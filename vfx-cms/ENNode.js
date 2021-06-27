@@ -104,14 +104,14 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
       <group position-y={3} rotation-x={Math.PI * -0.25}>
         <Text
           color={"#000000"}
-          fontSize={1.3}
+          fontSize={1.5}
           maxWidth={200}
           lineHeight={1}
           textAlign={"center"}
           font="/font/Cronos-Pro-Light_12448.ttf"
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.04}
+          outlineWidth={0.07}
           outlineColor="#ffffff"
         >{`${idx + 1}`}</Text>
       </group>
