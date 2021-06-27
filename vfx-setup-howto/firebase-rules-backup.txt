@@ -23,12 +23,13 @@
       }
     },
 
-    //
-    //
+
     "canvas": {
       "$canvasID": {
-        ".read": true,
-        ".write": "auth !== null && root.child('profile').child(auth.uid).child('canvas').child('ownerACL').hasChild(auth.uid) || auth !== null && root.child('profile').child(auth.uid).child('canvas').child('ownerACL').hasChild(auth.uid) "
+      	"$ownerID": {
+            ".read": true,
+        		".write": "auth !== null && auth.uid === $ownerID || auth !== null && root.child('profile').child($ownerID).child('canvas').child($canvasID).child('shareACL').hasChild(auth.uid)"
+        }
       }
     }
   }

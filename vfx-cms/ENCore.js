@@ -1,7 +1,7 @@
 import { meshBounds, Text, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef } from "react";
-import { Color } from "three";
+// import { Color } from "three";
 import { MathUtils } from "three";
 import { ShaderCubeChrome } from "../vfx-library/ShaderCubeChrome";
 import { ENState } from "./ENState";
@@ -159,6 +159,7 @@ export function Laptop({ ...props }) {
 }
 
 export function ENCore() {
+  //
   //
 
   return (

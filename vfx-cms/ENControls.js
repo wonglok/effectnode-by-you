@@ -2,7 +2,7 @@
 import { MapControls, meshBounds } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { ENState } from "./ENState";
+import { ENMethods, ENState } from "./ENState";
 
 //
 
@@ -13,9 +13,9 @@ export function ENControls() {
 
   useEffect(() => {
     camera.position.X = 0;
-    camera.position.y = 30;
-    camera.position.z = 56;
-    camera.fov = 35;
+    camera.position.y = 50;
+    camera.position.z = 50;
+    camera.fov = 60;
     camera.lookAt(0, 0, 0);
     camera.near = 0.1;
     camera.far = 10000.0;
@@ -35,7 +35,6 @@ export function ENControls() {
   //   raycaster.setFromCamera(mouse, camera);
   // });
 
-  //
   // let { raycaster, scene } = useThree();
   // let getFloorPt = () => {
   //   let floor = scene.getObjectByName("floor");
@@ -67,9 +66,16 @@ export function ENControls() {
       document.body.style.cursor = "";
     }
   };
+
   ENState.useReactiveKey("overlay", syncCursor);
   ENState.useReactiveKey("cursorMode", syncCursor);
   ENState.useReactiveKey("hovering", syncCursor);
+  ENState.useReactiveKey("draggingNodeID", () => {
+    mapControls.current.enabled = !ENState.draggingNodeID;
+  });
+  ENState.useReactiveKey("draggingIOID", () => {
+    mapControls.current.enabled = !ENState.draggingIOID;
+  });
 
   let eventsHandlers = {
     //
@@ -79,9 +85,7 @@ export function ENControls() {
         ENState.cursorMode = "pan";
       }
       if (ENState.cursorMode === "addCodeBlock") {
-        ENState.overlay = "";
-        ENState.cursorMode = "ready";
-        ENState.hovering = "floor";
+        ENMethods.addCodeBlock({ point });
       }
     },
 
@@ -91,11 +95,26 @@ export function ENControls() {
       if (ENState.cursorMode === "pan") {
         ENState.cursorMode = "ready";
       }
+
+      setTimeout(() => {
+        if (ENState.draggingIOID) {
+          ENState.draggingIOID = false;
+        }
+      }, 100);
     },
+
+    onPointerEnter: () => {},
 
     //
     onPointerMove: (ev) => {
+      ev.stopPropagation();
+      if (ENState.hovering !== "floor") {
+        ENState.hovering = "floor";
+      }
       ENState.cursorAt.copy(ev.point);
+
+      //
+      //
       //
       // console.log(ev);
       // ENState.movementXY = {

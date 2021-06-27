@@ -7,18 +7,21 @@ import { ENControls } from "./ENControls";
 
 //
 // import { Text } from "@react-three/drei";
-import { ENCore } from "./ENBuildings";
+import { ENCore } from "./ENCore";
 import { ENHDRI } from "./ENHDRI";
 import { useEffect } from "react";
 import { ENHtml } from "./ENHtmls";
-import { ENDisplayCursor } from "./ENDisplayCursor";
+import { ENDisplayConnectorWire, ENDisplayCursor } from "./ENDisplayCursor";
+import { ENNode } from "./ENNode";
+import { ENDisplayLinks, ENDisplayNodes } from "./ENDisplayNodes";
 
 export function ENLogicGraph() {
   let router = useRouter();
 
   useEffect(() => {
     ENState.canvasID = router.query.canvasID;
-  }, [router.query.canvasID]);
+    ENState.canvasOwnerID = router.query.ownerID;
+  }, [router.query.canvasID, router.query.ownerID]);
 
   return (
     <div className="w-full h-full relative">
@@ -45,7 +48,7 @@ function LogicContent() {
       {/*  */}
       <ENControls></ENControls>
 
-      <directionalLight
+      {/* <directionalLight
         position={[10, 10, -10]}
         args={["#ffffff", 0.5]}
       ></directionalLight>
@@ -53,13 +56,19 @@ function LogicContent() {
       <directionalLight
         position={[-10, 10, 10]}
         args={["#ffffff", 0.5]}
-      ></directionalLight>
+      ></directionalLight> */}
 
       <ENHDRI></ENHDRI>
 
       <ENCore></ENCore>
 
+      <ENDisplayNodes></ENDisplayNodes>
+      <ENDisplayLinks></ENDisplayLinks>
+
       <ENDisplayCursor></ENDisplayCursor>
+
+      <ENDisplayConnectorWire></ENDisplayConnectorWire>
+
       {/* <Text color="#000000">Loading...</Text> */}
     </group>
   );

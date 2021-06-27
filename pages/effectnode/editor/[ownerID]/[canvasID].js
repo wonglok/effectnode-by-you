@@ -1,4 +1,4 @@
-import { ENLogicGraph } from "../../../vfx-cms/ENLogicGraph";
+import { ENLogicGraph } from "../../../../vfx-cms/ENLogicGraph";
 
 //
 export default function EditCanvas() {

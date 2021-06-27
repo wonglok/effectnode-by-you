@@ -8,15 +8,6 @@ export const getID = function () {
   );
 };
 
-export const useAutoEvent = function (ev, fnc) {
-  useEffect(() => {
-    window.addEventListener(ev, fnc);
-    return () => {
-      window.removeEventListener(ev, fnc);
-    };
-  }, []);
-};
-
 export const makeShallowStore = (myObject = {}) => {
   let ___NameSpaceID = getID();
   let Utils = {
@@ -189,6 +180,15 @@ export const download = async (classRef, url) => {
       }
     }
   });
+};
+
+export const useAutoEvent = function (ev, fnc) {
+  useEffect(() => {
+    window.addEventListener(ev, fnc);
+    return () => {
+      window.removeEventListener(ev, fnc);
+    };
+  }, []);
 };
 
 //

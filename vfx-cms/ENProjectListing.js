@@ -98,7 +98,9 @@ export function ENProjectListing() {
                     className=" p-3 px-6 rounded-full bg-blue-500 text-white"
                     onClick={() => {
                       //
-                      router.push(`/effectnode/editor/${e._id}`);
+                      router.push(
+                        `/effectnode/editor/${e.data.ownerID}/${e._id}`
+                      );
                     }}
                   >
                     Edit

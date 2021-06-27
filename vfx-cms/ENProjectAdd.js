@@ -23,9 +23,7 @@ export function ENProjectAdd() {
             let newItem = myCanvasListing.push();
             newItem.set({
               title,
-              ownerACL: {
-                [user.uid]: true,
-              },
+              ownerID: user.uid,
               shareACL: {
                 placeholder: false,
               },
