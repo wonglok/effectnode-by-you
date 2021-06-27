@@ -1,10 +1,10 @@
-import { meshBounds } from "@react-three/drei";
+import { meshBounds, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { Color, Vector3 } from "three";
 import { ENMethods, ENState } from "./ENState";
 
-let MyIO = ({ io = "input", node, socket, e, total }) => {
+let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
   let v3 = new Vector3();
 
   let orbit = 5;
@@ -16,7 +16,9 @@ let MyIO = ({ io = "input", node, socket, e, total }) => {
     theta = Math.PI * e;
   }
 
-  theta -= (0.5 * (Math.PI * 2)) / total + Math.PI * -0.5;
+  theta -= (0.5 * (Math.PI * 2)) / total;
+
+  theta += Math.PI * 1.5;
 
   v3.setFromCylindricalCoords(orbit, theta, 0);
 
@@ -98,6 +100,21 @@ let MyIO = ({ io = "input", node, socket, e, total }) => {
         roughness={0.3}
         color={io === "input" ? "green" : "blue"}
       ></meshStandardMaterial>
+
+      <group position-y={3} rotation-x={Math.PI * -0.25}>
+        <Text
+          color={"#000000"}
+          fontSize={1.3}
+          maxWidth={200}
+          lineHeight={1}
+          textAlign={"center"}
+          font="/font/Cronos-Pro-Light_12448.ttf"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.04}
+          outlineColor="#ffffff"
+        >{`${idx + 1}`}</Text>
+      </group>
     </mesh>
   );
 };
@@ -153,6 +170,7 @@ export function ENNode({ node }) {
                 key={e._id}
                 socket={e}
                 node={node}
+                idx={idx}
                 e={(idx + 0) / arr.length}
                 total={node.data.inputs.length + node.data.outputs.length}
               ></MyIO>
@@ -172,6 +190,7 @@ export function ENNode({ node }) {
                 key={e._id}
                 socket={e}
                 node={node}
+                idx={idx}
                 e={(idx + 1) / arr.length}
                 total={node.data.inputs.length + node.data.outputs.length}
               ></MyIO>
