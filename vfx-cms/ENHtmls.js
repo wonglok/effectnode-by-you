@@ -138,22 +138,22 @@ function MainPanel() {
 function NodePanel() {
   let nodesTemplates = useNodes();
 
-  let { node, inputs, outputs } = useMemo(() => {
+  let { node, outputLinks, inputLinks } = useMemo(() => {
     let fireNodeID = ENState.currentEditNodeID;
     let node = ENState.nodes.find((e) => e._fid === fireNodeID);
-    let inputs = [];
-    let outputs = [];
+    let inputLinks = [];
+    let outputLinks = [];
 
     if (node) {
       let nodeID = node.data._id;
 
-      inputs = ENState.connections.filter((conn) => {
+      inputLinks = ENState.connections.filter((conn) => {
         if (conn.data.input.nodeID === nodeID) {
           return true;
         }
       });
 
-      outputs = ENState.connections.filter((conn) => {
+      outputLinks = ENState.connections.filter((conn) => {
         if (conn.data.output.nodeID === nodeID) {
           return true;
         }
@@ -162,11 +162,12 @@ function NodePanel() {
 
     return {
       node,
-      inputs,
-      outputs,
+      inputLinks,
+      outputLinks,
     };
   });
 
+  let [, reload] = useState(0);
   let [title, setTitle] = useState(node.data.title);
 
   return (
@@ -205,7 +206,7 @@ function NodePanel() {
         <div className=" cursor-pointer">Inputs</div>
       </div>
 
-      {inputs.map((e) => {
+      {inputLinks.map((e) => {
         let localID = e.data.input._id;
         let idx = node.data.inputs.findIndex((e) => e._id === localID);
         return (
@@ -214,6 +215,8 @@ function NodePanel() {
               className=" cursor-pointer"
               onPointerDown={() => {
                 //
+                ENMethods.removeLinkByID({ linkID: e._fid });
+                reload((s) => s + 1);
               }}
             >
               {/*  */}
@@ -227,7 +230,7 @@ function NodePanel() {
         <div className=" cursor-pointer">Outputs</div>
       </div>
 
-      {outputs.map((e) => {
+      {outputLinks.map((e) => {
         let localID = e.data.output._id;
         let idx = node.data.outputs.findIndex((e) => e._id === localID);
         return (
@@ -236,6 +239,8 @@ function NodePanel() {
               className=" cursor-pointer"
               onPointerDown={() => {
                 //
+                ENMethods.removeLinkByID({ linkID: e._fid });
+                reload((s) => s + 1);
               }}
             >
               {/*  */}
