@@ -1,12 +1,13 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { firebaseConfig } from "../vfx-cms/CONFIG";
 import { ENRuntime, getCodes } from "../vfx-runtime/ENRuntime";
 
 export async function getStaticProps(context) {
   return {
     props: {
-      graphA: await getGraphData(`-MdBQtfGPXXPkl-NuEoW`), //
+      graphA: await getEffectNodeData(`-MdBQtfGPXXPkl-NuEoW`), //
     },
   };
 }
@@ -45,10 +46,10 @@ function ContentA({ json }) {
   return null;
 }
 
-export async function getGraphData(graphID) {
+export async function getEffectNodeData(graphID) {
   return axios({
     method: "GET",
-    url: `https://en-you.firebaseio.com/canvas/${graphID}.json`,
+    url: `${firebaseConfig.databaseURL}canvas/${graphID}.json`,
   }).then(
     (response) => {
       let ans = false;
