@@ -226,7 +226,7 @@ function NodePanel() {
         );
       })}
 
-      <div className="p-3 text-xl font-serif ">
+      <div className="p-3 text-xl font-serif">
         <div className=" cursor-pointer">Outputs</div>
       </div>
 
