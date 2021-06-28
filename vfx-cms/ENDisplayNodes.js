@@ -23,7 +23,7 @@ export function ENDisplayNodes() {
     }
 
     //
-    return firebase
+    let unsusbs = firebase
       .database()
       .ref(`/canvas/${canvasID}/${canvasOwnerID}/nodes`)
       .on("value", (snap) => {
@@ -43,6 +43,9 @@ export function ENDisplayNodes() {
           setNodes(arr);
         }
       });
+    return () => {
+      unsusbs();
+    };
   }, [canvasID, canvasOwnerID]);
 
   return (
@@ -66,7 +69,6 @@ export function ENDisplayLinks() {
     if (!canvasID) {
       return () => {};
     }
-
     if (!canvasOwnerID) {
       return () => {};
     }

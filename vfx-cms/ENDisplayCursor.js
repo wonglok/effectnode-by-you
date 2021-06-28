@@ -1,7 +1,7 @@
 import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { CatmullRomCurve3, Color, Vector3 } from "three";
+import { BufferAttribute, CatmullRomCurve3, Color, Vector3 } from "three";
 import { ENState } from "./ENState";
 
 export function ENDisplayCursor() {
@@ -47,10 +47,11 @@ export function ENDisplayCursor() {
   );
 }
 
-export const getGeo = ({ a, b }) => {
+export const getGeo = ({ a, b, dotted = false }) => {
   const {
     LineSegmentsGeometry,
   } = require("three/examples/jsm/lines/LineSegmentsGeometry");
+  const { LineGeometry } = require("three/examples/jsm/lines/LineGeometry");
 
   const dist = new Vector3().copy(a).distanceTo(b);
   let raise = dist / 1.6;
@@ -67,10 +68,17 @@ export const getGeo = ({ a, b }) => {
     false
   );
 
-  const lineGeo = new LineSegmentsGeometry();
+  let lineGeo = new LineGeometry();
+  if (dotted) {
+    lineGeo = new LineSegmentsGeometry();
+  }
+  let colors = [];
   let pos = [];
   let count = 100;
   let temp = new Vector3();
+
+  let colorA = new Color();
+  let colorB = new Color("#0000ff");
 
   for (let i = 0; i < count; i++) {
     curvePts.getPointAt((i / count) % 1, temp);
@@ -84,7 +92,15 @@ export const getGeo = ({ a, b }) => {
       temp.z = 0.0;
     }
     pos.push(temp.x, temp.y, temp.z);
+    colorA.setStyle("#00ff00");
+    colorA.lerp(colorB, i / count);
+
+    //
+    colorA.offsetHSL(0, 0.5, 0.0);
+    colors.push(colorA.r, colorA.g, colorA.b);
   }
+
+  lineGeo.setColors(colors);
 
   lineGeo.setPositions(pos);
   return lineGeo;
@@ -117,7 +133,7 @@ export function ENDisplayConnectorWire() {
 
     let dragStartPos = new Vector3(1, 1, 1).copy(ENState.dragStartPos);
 
-    let lineGeo = getGeo({ a: cursorPos, b: dragStartPos });
+    let lineGeo = getGeo({ a: cursorPos, b: dragStartPos, dotted: true });
 
     const mesh = new Line2(lineGeo, lineMat);
     mesh.computeLineDistances();
@@ -138,7 +154,7 @@ export function ENDisplayConnectorWire() {
 
       if (needsUpdate) {
         //
-        let lineGeo = getGeo({ a: cursorPos, b: dragStartPos });
+        let lineGeo = getGeo({ a: cursorPos, b: dragStartPos, dotted: true });
         mesh.geometry = lineGeo;
       }
     };

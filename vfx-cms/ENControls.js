@@ -107,6 +107,7 @@ export function ENControls() {
 
     //
     onPointerMove: (ev) => {
+      ENState.moved++;
       ev.stopPropagation();
       if (ENState.hovering !== "floor") {
         ENState.hovering = "floor";
@@ -170,7 +171,7 @@ export function ENControls() {
       </mesh>
 
       <gridHelper
-        raycast={meshBounds}
+        raycast={() => {}}
         position-y={0.01}
         args={[500, 50, "#232323", "#232323"]}
       ></gridHelper>

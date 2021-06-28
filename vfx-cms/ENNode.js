@@ -6,6 +6,7 @@ import { ENMethods, ENState } from "./ENState";
 
 let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
   let v3 = new Vector3();
+  let v3b = new Vector3();
 
   let orbit = 5;
   let radius = 1;
@@ -17,10 +18,10 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
   }
 
   theta -= (0.5 * (Math.PI * 2)) / total;
-
   theta += Math.PI * 1.5;
 
   v3.setFromCylindricalCoords(orbit, theta, 0);
+  v3b.setFromCylindricalCoords(orbit + 3, theta, 0);
 
   let scan = () => {
     if (
@@ -43,79 +44,87 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
 
   return (
     //
-    <mesh
-      name={socket._id}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-        e.target.setPointerCapture(e.pointerId);
+    <>
+      <mesh
+        position-y={0}
+        name={socket._id}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          e.target.setPointerCapture(e.pointerId);
 
-        ENState.isDown = true;
-        ENState.draggingIOID = {
-          socket: JSON.parse(JSON.stringify(socket)),
-          node: JSON.parse(JSON.stringify(node)),
-        };
-        ENState.dragStartPos.copy(ENState.cursorAt);
-      }}
-      //
-      onPointerMove={({ eventObject }) => {
-        eventObject.material.emissive = new Color("#323232");
-        eventObject.material.needsUpdate = true;
-      }}
-      onPointerEnter={({ eventObject }) => {
-        eventObject.material.emissive = new Color("#323232");
-        eventObject.material.needsUpdate = true;
-      }}
-      onPointerLeave={({ eventObject }) => {
-        eventObject.material.emissive = new Color("#000000");
-        eventObject.material.needsUpdate = true;
-      }}
-      //
-      onPointerUp={(e) => {
-        e.stopPropagation();
-        e.target.releasePointerCapture(e.pointerId);
-        // ENMethods.saveCodeBlock({ node });
+          ENState.isDown = true;
+          ENState.draggingIOID = {
+            socket: JSON.parse(JSON.stringify(socket)),
+            node: JSON.parse(JSON.stringify(node)),
+          };
+          ENState.dragStartPos.copy(ENState.cursorAt);
+        }}
+        //
+        onPointerMove={({ eventObject }) => {
+          eventObject.material.emissive = new Color("#323232");
+          eventObject.material.needsUpdate = true;
+        }}
+        onPointerEnter={({ eventObject }) => {
+          eventObject.material.emissive = new Color("#323232");
+          eventObject.material.needsUpdate = true;
+        }}
+        onPointerLeave={({ eventObject }) => {
+          eventObject.material.emissive = new Color("#000000");
+          eventObject.material.needsUpdate = true;
+        }}
+        //
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          e.target.releasePointerCapture(e.pointerId);
+          // ENMethods.saveCodeBlock({ node });
 
-        let res = scan();
+          let res = scan();
 
-        if (res) {
-          ENMethods.addLink({
-            input: res.input.socket,
-            output: res.output.socket,
-          });
-        }
+          if (res) {
+            ENMethods.addLink({
+              input: res.input.socket,
+              output: res.output.socket,
+            });
+          }
 
-        ENState.isDown = false;
-        ENState.draggingIOID = false;
-      }}
-      //
-      position={v3.toArray()}
-      userData={socket}
-    >
-      {/* <boxBufferGeometry
+          ENState.isDown = false;
+          ENState.draggingIOID = false;
+        }}
+        //
+        position={v3.toArray()}
+        userData={socket}
+      >
+        {/* <boxBufferGeometry
         args={[radius * 1.5, radius * 1.5, radius * 1.5]}
       ></boxBufferGeometry> */}
-      <sphereBufferGeometry args={[radius, 20, 20]}></sphereBufferGeometry>
-      <meshStandardMaterial
-        metalness={1}
-        roughness={0.3}
-        color={io === "input" ? "green" : "blue"}
-      ></meshStandardMaterial>
+        <sphereBufferGeometry args={[radius, 20, 20]}></sphereBufferGeometry>
+        <meshStandardMaterial
+          metalness={1}
+          roughness={0.3}
+          color={io === "input" ? "green" : "blue"}
+        ></meshStandardMaterial>
+      </mesh>
 
-      <group position-y={3} rotation-x={Math.PI * -0.25}>
-        <Text
-          color={"#000000"}
-          fontSize={1.5}
-          maxWidth={200}
-          lineHeight={1}
-          textAlign={"center"}
-          font="/font/Cronos-Pro-Light_12448.ttf"
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.07}
-          outlineColor="#ffffff"
-        >{`${idx + 1}`}</Text>
+      <group position={v3b.toArray()}>
+        <group
+          position-z={io === "input" ? -0.1 : 0.1}
+          rotation-x={Math.PI * -0.25}
+        >
+          <Text
+            color={"#000000"}
+            fontSize={1.5}
+            maxWidth={200}
+            lineHeight={1}
+            textAlign={"center"}
+            font="/font/Cronos-Pro-Light_12448.ttf"
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.12}
+            outlineColor="#ffffff"
+          >{`${idx + 1}`}</Text>
+        </group>
       </group>
-    </mesh>
+    </>
   );
 };
 
@@ -141,11 +150,18 @@ export function ENNode({ node }) {
             onPointerDown={(e) => {
               ENState.isDown = true;
               ENState.draggingNodeID = node._id;
+              ENState.moved = 0;
             }}
             onPointerUp={(e) => {
               ENState.isDown = false;
               ENState.draggingNodeID = false;
               ENMethods.saveCodeBlock({ node });
+
+              if (ENState.moved <= 10) {
+                ENState.currentEditNodeID = node._id;
+                ENState.overlay = "node";
+              }
+              ENState.moved = 0;
             }}
           >
             <sphereBufferGeometry
@@ -158,7 +174,7 @@ export function ENNode({ node }) {
           </mesh>
         </group>
 
-        <group>
+        <group position-z={-1.11}>
           {node.data.inputs.map((e, idx, arr) => {
             //
             //
@@ -178,7 +194,7 @@ export function ENNode({ node }) {
           })}
         </group>
 
-        <group>
+        <group position-z={1.11}>
           {node.data.outputs.map((e, idx, arr) => {
             //
             //

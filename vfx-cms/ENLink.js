@@ -15,9 +15,9 @@ export function ENLink({ link }) {
       transparent: true,
       color: new Color("#00ffff"),
       linewidth: 0.0015,
-      opacity: 1.0,
+      opacity: 0.8,
       dashed: true,
-      vertexColors: false,
+      vertexColors: true,
     });
 
     return material;
@@ -27,8 +27,6 @@ export function ENLink({ link }) {
   let { scene } = useThree();
 
   let mesh = useMemo(() => {
-    //
-
     let inputV3 = new Vector3();
     let outputV3 = new Vector3();
 
@@ -44,7 +42,7 @@ export function ENLink({ link }) {
     let inputV3 = new Vector3();
     let outputV3 = new Vector3();
 
-    let sig = "";
+    let sig = 0;
     works.current.updateLine = () => {
       let inputO3 = scene.getObjectByName(link.data.input._id);
       let outputO3 = scene.getObjectByName(link.data.output._id);

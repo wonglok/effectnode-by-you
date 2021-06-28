@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { ENState } from "./ENState";
-
+import { useEffect, useState } from "react";
+import { ENMethods, ENState } from "./ENState";
+import path from "path";
 export function ENHtml() {
   ENState.makeKeyReactive("overlay");
 
@@ -19,29 +19,9 @@ export function ENHtml() {
 
   return (
     <>
-      {ENState.overlay === "main" && (
-        <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
-          {/*  */}
-          <div className="bg-yellow-400">
-            <div className="p-3 text-2xl font-serif">
-              <div className="text-white select-none">Getting Started</div>
-            </div>
-          </div>
+      {ENState.overlay === "main" && <MainPanel></MainPanel>}
 
-          <div className="p-3 text-xl font-serif">
-            <div
-              className=" cursor-pointer"
-              onPointerDown={() => {
-                ENState.hovering = "floor";
-                ENState.cursorMode = "addCodeBlock";
-                ENState.overlay = "addCodeBlock";
-              }}
-            >
-              Add New CodeBlock
-            </div>
-          </div>
-        </div>
-      )}
+      {ENState.overlay === "node" && <NodePanel></NodePanel>}
 
       {ENState.overlay === "addCodeBlock" && (
         <div className="w-full absolute top-0 left-0 bg-white  bg-opacity-95">
@@ -79,3 +59,102 @@ export function ENHtml() {
     </>
   );
 }
+
+function MainPanel() {
+  let [nodesLogic, setNodes] = useState([]);
+  useEffect(() => {
+    //
+    let r = require.context("../vfx-nodes", false, /\.js$/, "lazy");
+
+    function importAll(r) {
+      let arr = [];
+      r.keys().forEach((key) => {
+        let filename = path.basename(key);
+
+        arr.push({
+          title: filename,
+          // logic: r(key),
+        });
+      });
+
+      setNodes(arr);
+    }
+
+    importAll(r);
+  }, []);
+
+  return (
+    <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
+      {/*  */}
+      <div className="bg-yellow-400">
+        <div className="p-3 text-2xl font-serif">
+          <div className="text-white select-none">Getting Started</div>
+        </div>
+      </div>
+
+      <div className="p-3 text-xl font-serif ">
+        <div className="">Add New CodeBlock</div>
+      </div>
+
+      {nodesLogic.map((e) => {
+        return (
+          <div key={e.title} className="ml-3 mb-3 text  underline">
+            <div
+              className=" cursor-pointer"
+              onPointerDown={() => {
+                ENState.addNodeTitle = e.title;
+                ENState.hovering = "floor";
+                ENState.cursorMode = "addCodeBlock";
+                ENState.overlay = "addCodeBlock";
+              }}
+            >
+              {e.title}
+            </div>
+          </div>
+        );
+      })}
+      {/* <div className="p-3 text font-serif underline">
+        <div
+          className=" cursor-pointer"
+          onPointerDown={() => {
+            ENState.addNodeTitle = "mytitle";
+            ENState.hovering = "floor";
+            ENState.cursorMode = "addCodeBlock";
+            ENState.overlay = "addCodeBlock";
+          }}
+        >
+          Add New CodeBlock
+        </div>
+      </div> */}
+    </div>
+  );
+}
+
+function NodePanel() {
+  return (
+    <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
+      {/*  */}
+      <div className="bg-blue-400">
+        <div className="p-3 text-2xl font-serif">
+          <div className="text-white select-none">Node Settings</div>
+        </div>
+      </div>
+
+      <div className="p-3 text-xl font-serif">
+        <div
+          className=" cursor-pointer"
+          onPointerDown={() => {
+            if (window.confirm(`remove item`)) {
+              ENMethods.removeCurrentNodeAndConnections();
+              ENState.overlay = "";
+            }
+          }}
+        >
+          Remove Code Blocks and Connections
+        </div>
+      </div>
+    </div>
+  );
+}
+
+//
