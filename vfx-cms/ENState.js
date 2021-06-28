@@ -127,7 +127,7 @@ export class ENMethods {
             return true;
           }
         })
-        .map((e) => e._id);
+        .map((e) => e._fid);
 
       connIDs.forEach((id) => {
         ENMethods.removeLinkByID({ linkID: id });

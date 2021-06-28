@@ -1,7 +1,5 @@
-export function effect({ node, ports }) {
-  //
-  // ports.send(1, {
-  //   data: 1,
-  // });
-  //
+export function effect({ mini, node }) {
+  node.in0.stream((v) => {
+    console.log(v);
+  });
 }

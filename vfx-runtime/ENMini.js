@@ -1,3 +1,5 @@
+import { getID } from "./ENUtils";
+
 export class ENMini {
   constructor({ parentMini = false }) {
     this.parentMini = parentMini;
@@ -20,9 +22,23 @@ export class ENMini {
         });
       });
     };
-    this.set = (k, v) => {
-      this.resource.set(k, v);
+
+    let NS = getID();
+    this.set = (key, v) => {
+      this.resource.set(key, v);
+      window.dispatchEvent(new CustomEvent(`${NS}${key}`, { detail: v }));
     };
+    this.onChange = (key, fnc) => {
+      let h = ({ detail: v }) => {
+        fnc(v);
+      };
+      this.get(key).then(fnc);
+      window.addEventListener(`${NS}${key}`, h);
+      this.onClean(() => {
+        window.removeEventListener(`${NS}${key}`, h);
+      });
+    };
+
     this.name = "ENMini";
 
     let isAborted = false;

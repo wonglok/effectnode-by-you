@@ -70,14 +70,14 @@ export function ENProjectListing() {
                       let title = e.data.title || "no title";
 
                       onReady().then(({ user, db }) => {
-                        let newTitle = window
-                          .prompt(
-                            `Type "${title}" to Confirm Removal, theres no restore.`,
-                            `${title}`
-                          )
-                          .trim();
+                        let newTitle = window.prompt(
+                          `Type "${title}" to Confirm Removal, theres no restore.`,
+                          `${title}`
+                        );
 
                         if (newTitle) {
+                          newTitle = (newTitle || "").trim();
+
                           let listingRef = db.ref(
                             `profile/${user.uid}/canvas/${e._fid}/title`
                           );
@@ -115,12 +115,12 @@ export function ENProjectListing() {
                       onReady().then(({ user, db }) => {
                         let title = e.data.title || "no title";
                         if (
-                          window
-                            .prompt(
+                          (
+                            window.prompt(
                               `Type "${title}" to Confirm Removal, theres no restore.`,
                               `${title} ______`
-                            )
-                            .trim() === title
+                            ) || ""
+                          ).trim() === title
                         ) {
                           let listingRef = db.ref(
                             `profile/${user.uid}/canvas/${e._fid}`

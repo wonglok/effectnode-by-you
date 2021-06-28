@@ -60,11 +60,11 @@ export function ENHtml() {
   );
 }
 
-let useNodes = () => {
+export let useNodes = () => {
   let [nodesTemplates, setNodes] = useState([]);
   useEffect(() => {
     //
-    let r = require.context("../vfx-nodes", false, /\.js$/, "lazy");
+    let r = require.context("../vfx-nodes", true, /\.js$/, "lazy");
 
     function importAll(r) {
       let arr = [];
@@ -73,7 +73,7 @@ let useNodes = () => {
 
         arr.push({
           title: filename,
-          // logic: r(key),
+          loader: () => r(key),
         });
       });
 
@@ -227,7 +227,7 @@ function NodePanel() {
               {/*  */}
               Remove Input at label "{idx}"{" "}
               {remoteNode.data.title && (
-                <span>conncted to "{remoteNode.data.title}"</span>
+                <span>which is conncted to "{remoteNode.data.title}"</span>
               )}
             </div>
           </div>
@@ -252,7 +252,6 @@ function NodePanel() {
             <div
               className=" cursor-pointer"
               onPointerDown={() => {
-                //
                 ENMethods.removeLinkByID({ linkID: e._fid });
                 reload((s) => s + 1);
               }}
@@ -260,7 +259,7 @@ function NodePanel() {
               {/*  */}
               Remove Output at label "{idx}"{" "}
               {remoteNode.data.title && (
-                <span>conncted to "{remoteNode.data.title}"</span>
+                <span>which is conncted to "{remoteNode.data.title}"</span>
               )}
             </div>
           </div>
@@ -268,7 +267,7 @@ function NodePanel() {
       })}
 
       <div className="p-3 text-xl font-serif ">
-        <div className=" cursor-pointer">Clean up</div>
+        <div className=" cursor-pointer">Remove</div>
       </div>
 
       <div className="p-3 underline">
@@ -281,7 +280,7 @@ function NodePanel() {
             }
           }}
         >
-          Remove Code Blocks & Connections
+          Remove Code Block & Connections
         </div>
       </div>
     </div>

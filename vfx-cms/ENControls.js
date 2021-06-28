@@ -163,7 +163,7 @@ export function ENControls() {
         rotation-x={Math.PI * -0.5}
         {...eventsHandlers}
       >
-        <planeBufferGeometry args={[500, 500, 2, 2]}></planeBufferGeometry>
+        <planeBufferGeometry args={[1000, 1000, 2, 2]}></planeBufferGeometry>
 
         <shaderMaterial
           fragmentShader={`void main (void) { discard; }`}
@@ -173,7 +173,7 @@ export function ENControls() {
       <gridHelper
         raycast={() => {}}
         position-y={0.01}
-        args={[500, 50, "#232323", "#232323"]}
+        args={[1000, 100, "#232323", "#232323"]}
       ></gridHelper>
     </group>
   );
