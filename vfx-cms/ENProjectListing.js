@@ -22,7 +22,7 @@ export function ENProjectListing() {
             let arr = [];
             for (let kn in val) {
               arr.push({
-                _id: kn,
+                _fid: kn,
                 data: val[kn],
               });
             }
@@ -60,7 +60,7 @@ export function ENProjectListing() {
         <tbody>
           {ENState.listing.map((e, idx) => {
             return (
-              <tr key={e._id}>
+              <tr key={e._fid}>
                 <td className="p-3 m-3 border bg-white ">{e.data.title}</td>
                 <td className="p-3 border m-0">
                   <button
@@ -79,7 +79,7 @@ export function ENProjectListing() {
 
                         if (newTitle) {
                           let listingRef = db.ref(
-                            `profile/${user.uid}/canvas/${e._id}/title`
+                            `profile/${user.uid}/canvas/${e._fid}/title`
                           );
                           listingRef.set(newTitle);
 
@@ -99,7 +99,7 @@ export function ENProjectListing() {
                     onClick={() => {
                       //
                       router.push(
-                        `/effectnode/editor/${e.data.ownerID}/${e._id}`
+                        `/effectnode/editor/${e.data.ownerID}/${e._fid}`
                       );
                     }}
                   >
@@ -123,7 +123,7 @@ export function ENProjectListing() {
                             .trim() === title
                         ) {
                           let listingRef = db.ref(
-                            `profile/${user.uid}/canvas/${e._id}`
+                            `profile/${user.uid}/canvas/${e._fid}`
                           );
                           listingRef.remove();
 

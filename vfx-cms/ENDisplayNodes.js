@@ -31,10 +31,9 @@ export function ENDisplayNodes() {
           let arr = [];
 
           let val = snap.val();
-
           for (let kn in val) {
             arr.push({
-              _id: kn,
+              _fid: kn,
               data: val[kn],
             });
           }
@@ -51,7 +50,7 @@ export function ENDisplayNodes() {
   return (
     <group>
       {nodes.map((node) => {
-        return <ENNode key={node._id} node={node}></ENNode>;
+        return <ENNode key={node._fid} node={node}></ENNode>;
       })}
     </group>
   );
@@ -85,7 +84,7 @@ export function ENDisplayLinks() {
 
           for (let kn in val) {
             arr.push({
-              _id: kn,
+              _fid: kn,
               data: val[kn],
             });
           }
@@ -101,7 +100,7 @@ export function ENDisplayLinks() {
   return (
     <group>
       {links.map((link) => {
-        return <ENLink key={link._id} link={link}></ENLink>;
+        return <ENLink key={link._fid} link={link}></ENLink>;
       })}
     </group>
   );

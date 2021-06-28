@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ENMethods, ENState } from "./ENState";
 import path from "path";
 export function ENHtml() {
@@ -60,8 +60,8 @@ export function ENHtml() {
   );
 }
 
-function MainPanel() {
-  let [nodesLogic, setNodes] = useState([]);
+let useNodes = () => {
+  let [nodesTemplates, setNodes] = useState([]);
   useEffect(() => {
     //
     let r = require.context("../vfx-nodes", false, /\.js$/, "lazy");
@@ -83,6 +83,11 @@ function MainPanel() {
     importAll(r);
   }, []);
 
+  return nodesTemplates;
+};
+
+function MainPanel() {
+  let nodesTemplates = useNodes();
   return (
     <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
       {/*  */}
@@ -96,7 +101,7 @@ function MainPanel() {
         <div className="">Add New CodeBlock</div>
       </div>
 
-      {nodesLogic.map((e) => {
+      {nodesTemplates.map((e) => {
         return (
           <div key={e.title} className="ml-3 mb-3 text  underline">
             <div
@@ -131,6 +136,39 @@ function MainPanel() {
 }
 
 function NodePanel() {
+  let nodesTemplates = useNodes();
+
+  let { node, inputs, outputs } = useMemo(() => {
+    let fireNodeID = ENState.currentEditNodeID;
+    let node = ENState.nodes.find((e) => e._fid === fireNodeID);
+    let inputs = [];
+    let outputs = [];
+
+    if (node) {
+      let nodeID = node.data._id;
+
+      inputs = ENState.connections.filter((conn) => {
+        if (conn.data.input.nodeID === nodeID) {
+          return true;
+        }
+      });
+
+      outputs = ENState.connections.filter((conn) => {
+        if (conn.data.output.nodeID === nodeID) {
+          return true;
+        }
+      });
+    }
+
+    return {
+      node,
+      inputs,
+      outputs,
+    };
+  });
+
+  let [title, setTitle] = useState(node.data.title);
+
   return (
     <div className="w-full h-full absolute top-0 left-0 bg-white  bg-opacity-95">
       {/*  */}
@@ -139,8 +177,75 @@ function NodePanel() {
           <div className="text-white select-none">Node Settings</div>
         </div>
       </div>
+      <div className="p-3 text-xl font-serif ">
+        <div className="">
+          Node using logic:{" "}
+          <div className="border-b border-black inline-block">
+            <select
+              value={title}
+              onChange={({ target: { value } }) => {
+                node.data.title = value;
+                ENMethods.saveCodeBlock({ node });
+                setTitle(value);
+              }}
+            >
+              {nodesTemplates.map((t, i) => {
+                return (
+                  <option key={i + t.title} value={t.title}>
+                    {t.title}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
+      </div>
 
-      <div className="p-3 text-xl font-serif">
+      <div className="p-3 text-xl font-serif ">
+        <div className=" cursor-pointer">Inputs</div>
+      </div>
+
+      {inputs.map((e) => {
+        let localID = e.data.input._id;
+        let idx = node.data.inputs.findIndex((e) => e._id === localID);
+        return (
+          <div key={e._fid} className="ml-3 mb-3 text  underline">
+            <div
+              className=" cursor-pointer"
+              onPointerDown={() => {
+                //
+              }}
+            >
+              {/*  */}
+              Socket at {idx}
+            </div>
+          </div>
+        );
+      })}
+
+      <div className="p-3 text-xl font-serif ">
+        <div className=" cursor-pointer">Outputs</div>
+      </div>
+
+      {outputs.map((e) => {
+        let localID = e.data.output._id;
+        let idx = node.data.outputs.findIndex((e) => e._id === localID);
+        return (
+          <div key={e._fid} className="ml-3 mb-3 text  underline">
+            <div
+              className=" cursor-pointer"
+              onPointerDown={() => {
+                //
+              }}
+            >
+              {/*  */}
+              Socket at {idx}
+            </div>
+          </div>
+        );
+      })}
+
+      <div className="p-3 text-xl font-serif underline">
         <div
           className=" cursor-pointer"
           onPointerDown={() => {
@@ -150,7 +255,7 @@ function NodePanel() {
             }
           }}
         >
-          Remove Code Blocks and Connections
+          Remove Code Blocks & Connections
         </div>
       </div>
     </div>

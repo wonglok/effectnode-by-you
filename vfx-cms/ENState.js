@@ -71,7 +71,7 @@ export class ENMethods {
     let ref = firebase
       .database()
       .ref(
-        `/canvas/${ENState.canvasID}/${ENState.canvasOwnerID}/nodes/${node._id}`
+        `/canvas/${ENState.canvasID}/${ENState.canvasOwnerID}/nodes/${node._fid}`
       );
 
     ref.set(node.data);
@@ -114,7 +114,7 @@ export class ENMethods {
   static removeCurrentNodeAndConnections() {
     let nodeIDFire = ENState.currentEditNodeID;
 
-    let node = ENState.nodes.find((e) => e._id === nodeIDFire);
+    let node = ENState.nodes.find((e) => e._fid === nodeIDFire);
     if (node) {
       let nodeID = node.data._id;
 

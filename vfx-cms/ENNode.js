@@ -27,7 +27,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
     if (
       ENState.draggingIOID &&
       ENState.draggingIOID.socket._id !== socket._id &&
-      ENState.draggingIOID.node._id !== node._id &&
+      ENState.draggingIOID.node._fid !== node._fid &&
       ENState.draggingIOID.socket.type !== socket.type
     ) {
       //
@@ -35,6 +35,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
       let input = pair.find((e) => e.socket.type === "input");
       let output = pair.find((e) => e.socket.type === "output");
 
+      console.log(input, output);
       // console.log(input, output);
       if (input && output) {
         return { input, output };
@@ -121,7 +122,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
             anchorY="middle"
             outlineWidth={0.12}
             outlineColor="#ffffff"
-          >{`${idx + 1}`}</Text>
+          >{`${idx}`}</Text>
         </group>
       </group>
     </>
@@ -134,7 +135,7 @@ export function ENNode({ node }) {
 
   useFrame(() => {
     if (gp.current) {
-      if (ENState.draggingNodeID === node._id) {
+      if (ENState.draggingNodeID === node.data._id) {
         node.data.position = ENState.cursorAt.toArray();
       }
       gp.current.position.fromArray(node.data.position);
@@ -144,12 +145,27 @@ export function ENNode({ node }) {
   return (
     <group position-y={radius}>
       <group ref={gp}>
+        <group position-z={13} position-y={0} rotation-x={Math.PI * -0.25}>
+          <Text
+            color={"#000000"}
+            fontSize={1.5}
+            maxWidth={200}
+            lineHeight={1}
+            textAlign={"center"}
+            font="/font/Cronos-Pro-Light_12448.ttf"
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.12}
+            outlineColor="#ffffff"
+          >{`${node.data.title}`}</Text>
+        </group>
+
         <group>
           <mesh
             raycast={meshBounds}
             onPointerDown={(e) => {
               ENState.isDown = true;
-              ENState.draggingNodeID = node._id;
+              ENState.draggingNodeID = node.data._id;
               ENState.moved = 0;
             }}
             onPointerUp={(e) => {
@@ -158,7 +174,7 @@ export function ENNode({ node }) {
               ENMethods.saveCodeBlock({ node });
 
               if (ENState.moved <= 10) {
-                ENState.currentEditNodeID = node._id;
+                ENState.currentEditNodeID = node._fid;
                 ENState.overlay = "node";
               }
               ENState.moved = 0;
@@ -182,7 +198,6 @@ export function ENNode({ node }) {
 
             return (
               <MyIO
-                key={e._id}
                 key={e._id}
                 socket={e}
                 node={node}

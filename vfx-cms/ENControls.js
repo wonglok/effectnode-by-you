@@ -14,8 +14,8 @@ export function ENControls() {
   useEffect(() => {
     camera.position.X = 0;
     camera.position.y = 50;
-    camera.position.z = 50;
-    camera.fov = 60;
+    camera.position.z = 75;
+    camera.fov = 45;
     camera.lookAt(0, 0, 0);
     camera.near = 0.1;
     camera.far = 10000.0;
