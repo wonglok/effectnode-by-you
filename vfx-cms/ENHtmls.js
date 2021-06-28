@@ -209,6 +209,11 @@ function NodePanel() {
       {inputLinks.map((e) => {
         let localID = e.data.input._id;
         let idx = node.data.inputs.findIndex((e) => e._id === localID);
+
+        let socket = node.data.inputs.find((e) => e._id === localID);
+        let remoteNode = ENState.nodes.find(
+          (e) => e.data._id === socket.nodeID
+        );
         return (
           <div key={e._fid} className="ml-3 mb-3 text  underline">
             <div
@@ -220,7 +225,10 @@ function NodePanel() {
               }}
             >
               {/*  */}
-              Socket at {idx}
+              Remove Input at label "{idx}"{" "}
+              {remoteNode.data.title && (
+                <span>conncted to "{remoteNode.data.title}"</span>
+              )}
             </div>
           </div>
         );
@@ -233,6 +241,12 @@ function NodePanel() {
       {outputLinks.map((e) => {
         let localID = e.data.output._id;
         let idx = node.data.outputs.findIndex((e) => e._id === localID);
+
+        let socket = node.data.outputs.find((e) => e._id === localID);
+        let remoteNode = ENState.nodes.find(
+          (e) => e.data._id === socket.nodeID
+        );
+
         return (
           <div key={e._fid} className="ml-3 mb-3 text  underline">
             <div
@@ -244,13 +258,20 @@ function NodePanel() {
               }}
             >
               {/*  */}
-              Socket at {idx}
+              Remove Output at label "{idx}"{" "}
+              {remoteNode.data.title && (
+                <span>conncted to "{remoteNode.data.title}"</span>
+              )}
             </div>
           </div>
         );
       })}
 
-      <div className="p-3 text-xl font-serif underline">
+      <div className="p-3 text-xl font-serif ">
+        <div className=" cursor-pointer">Clean up</div>
+      </div>
+
+      <div className="p-3 underline">
         <div
           className=" cursor-pointer"
           onPointerDown={() => {
