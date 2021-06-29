@@ -6,11 +6,11 @@ Stack: NextJS
 Hosting: Vercel
 Visual Programming DB: Firebase  (You can make 1 firebase for many many projects)
 
-Preview Link:
-https://you.effectnode.com/
+VFX Preview Link:
+https://you.effectnode.com
 
 Visual Programming (Login with Google Firebase)
-https://you.effectnode.com/effectnode
+YOUR_DOMAIN.com/effectnode
 
 ![Main Page Preview](https://user-images.githubusercontent.com/4082826/123717938-8577d980-d8b0-11eb-9013-82dfc9f6603e.png)
 
