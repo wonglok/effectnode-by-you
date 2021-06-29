@@ -8,7 +8,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
   let v3 = new Vector3();
   let v3b = new Vector3();
 
-  let orbit = 5;
+  let orbit = 6;
   let radius = 1;
 
   let theta = e * -Math.PI;
@@ -21,7 +21,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
   theta += Math.PI * 1.5;
 
   v3.setFromCylindricalCoords(orbit, theta, 0);
-  v3b.setFromCylindricalCoords(orbit + 3, theta, 0);
+  v3b.setFromCylindricalCoords(orbit + 4.5, theta, 0);
 
   let scan = () => {
     if (
@@ -130,7 +130,7 @@ let MyIO = ({ idx, io = "input", node, socket, e, total }) => {
 };
 
 export function ENNode({ node }) {
-  let radius = 1.75;
+  let radius = 2.75;
   let gp = useRef();
 
   useFrame(() => {
@@ -145,7 +145,7 @@ export function ENNode({ node }) {
   return (
     <group position-y={radius}>
       <group ref={gp}>
-        <group position-z={13} position-y={0} rotation-x={Math.PI * -0.25}>
+        <group position-z={18} position-y={0} rotation-x={Math.PI * -0.25}>
           <Text
             color={"#000000"}
             fontSize={1.5}

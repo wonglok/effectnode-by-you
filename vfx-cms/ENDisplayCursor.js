@@ -60,10 +60,10 @@ export const getGeo = ({ a, b, dotted = false }) => {
   }
   const curvePts = new CatmullRomCurve3(
     [
-      new Vector3(a.x, a.y, a.z),
-      new Vector3(a.x, a.y + raise, a.z),
-      new Vector3(b.x, b.y + raise, b.z),
-      new Vector3(b.x, b.y, b.z),
+      new Vector3(a.x, a.y - 1, a.z),
+      new Vector3(a.x, a.y - 1 + raise, a.z),
+      new Vector3(b.x, b.y - 1 + raise, b.z),
+      new Vector3(b.x, b.y - 1, b.z),
     ],
     false
   );

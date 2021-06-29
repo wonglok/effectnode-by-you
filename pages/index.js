@@ -27,7 +27,7 @@ export default function IndexPage({ graphA }) {
         {graphA && <ContentA json={graphA}></ContentA>}
         <Bloomer></Bloomer>
 
-        <OrbitControls></OrbitControls>
+        <OrbitControls enableRotate={false} enablePan={false}></OrbitControls>
       </Canvas>
     </div>
   );
