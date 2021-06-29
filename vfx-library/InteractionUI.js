@@ -30,6 +30,17 @@ export class InteractionUI {
     let planeMesh = new Mesh(geoPlane, matPlane);
     planeMesh.position.z = -camera.position.z / 2;
 
+    mini.onResize(async () => {
+      let viewport = await mini.ready.viewport;
+      let geoPlane = new PlaneBufferGeometry(
+        3.0 * viewport.width,
+        3.0 * viewport.height,
+        2,
+        2
+      );
+      planeMesh.geometry = geoPlane;
+    });
+
     scene.add(planeMesh);
     mini.onClean(() => {
       scene.remove(planeMesh);
