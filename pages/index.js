@@ -2,6 +2,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { firebaseConfig } from "../vfx-cms/CONFIG";
+import { InteractionUI } from "../vfx-library/InteractionUI";
 import { ENRuntime, getCodes } from "../vfx-runtime/ENRuntime";
 
 export async function getStaticProps(context) {
@@ -13,8 +14,13 @@ export async function getStaticProps(context) {
 }
 
 export default function IndexPage({ graphA }) {
+  let ref = useRef();
+  useEffect(() => {
+    return InteractionUI.fixTouchScreen({ target: ref.current });
+  }, []);
+
   return (
-    <div className="w-full h-full">
+    <div ref={ref} className="w-full h-full">
       <Canvas dpr={[1, 3]}>
         {graphA && <ContentA json={graphA}></ContentA>}
       </Canvas>

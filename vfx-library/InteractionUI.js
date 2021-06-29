@@ -7,6 +7,27 @@ import {
 } from "three";
 
 export class InteractionUI {
+  static fixTouchScreen({ target }) {
+    let onEvent = (target, event, h) => {
+      target.addEventListener(event, h, { passive: false });
+      return () => {
+        target.removeEventListener(event, h);
+      };
+    };
+
+    let clean1 = onEvent(target, "touchstart", (ev) => {
+      ev.preventDefault();
+    });
+
+    let clean2 = onEvent(target, "toucmove", (ev) => {
+      ev.preventDefault();
+    });
+
+    return () => {
+      clean1();
+      clean2();
+    };
+  }
   static async hoverPlane({ mini }) {
     let raycaster = await mini.ready.raycaster;
     let mouse = await mini.ready.mouse;
@@ -46,7 +67,7 @@ export class InteractionUI {
       scene.remove(planeMesh);
     });
 
-    let temppos = new Vector3();
+    let temppos = new Vector3(0, 0, 0);
     mini.onLoop(() => {
       planeMesh.lookAt(camera.position);
       raycaster.setFromCamera(mouse, camera);

@@ -21,6 +21,7 @@ import { Geometry } from "three/examples/jsm/deprecated/Geometry.js";
 // import { ShaderCubeChrome } from "../../Shaders/ShaderCubeChrome";
 import { TextureLoader } from "three";
 import { InteractionUI } from "./InteractionUI";
+import { sleep } from "../vfx-runtime/ENUtils";
 
 let enableBloom = (v) => console.log("enable bloom placeholder", v);
 
@@ -30,16 +31,29 @@ export const example = async ({ mini }) => {
   let scene = await mini.ready.scene;
 
   let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
-
-  mini.set("tracker", vec3Mouse);
-
-  let wiggle = new SpiritGeo({
-    mini: mini,
+  setTimeout(() => {
+    vec3Mouse.x = 0;
+    vec3Mouse.y = 0;
+    vec3Mouse.z = 1;
   });
+
+  let tt = setInterval(() => {
+    if (vec3Mouse.length() !== 0) {
+      clearInterval(tt);
+
+      let wiggle = new SpiritGeo({
+        mini: mini,
+        tracker: vec3Mouse,
+      });
+    }
+  });
+
+  // mini.set("tracker", vec3Mouse);
 };
 
 export class LokLokGravitySimulation {
-  constructor({ mini, width, height }) {
+  constructor({ mini, width, height, tracker }) {
+    this.tracker = tracker;
     this.WIDTH = width;
     this.HEIGHT = height;
     this.count = width * height;
@@ -53,7 +67,8 @@ export class LokLokGravitySimulation {
     // let mouse = await UI.hoverPlane(mini);
 
     // let mouse = await Mouse.orbitTrace(mini);
-    let mouse = await mini.ready.tracker;
+    let mouse = this.tracker;
+    // let mouse = await mini.ready.tracker;
 
     this.gpu = new GPUComputationRenderer(this.WIDTH, this.HEIGHT, renderer);
     let gpu = this.gpu;
@@ -289,7 +304,8 @@ export class LokLokGravitySimulation {
 }
 
 class LokLokHairBallSimulation {
-  constructor({ mini, virtual, numberOfScans = 10, trailSize = 32 }) {
+  constructor({ tracker, mini, virtual, numberOfScans = 10, trailSize = 32 }) {
+    this.tracker = tracker;
     this.mini = mini;
     this.virtual = virtual;
     this.WIDTH = trailSize;
@@ -317,7 +333,8 @@ class LokLokHairBallSimulation {
     const virtualLookUpTexture = this.gpu.createTexture();
 
     // let mouse = await Mouse.orbitTrace(mini);
-    let mouse = await mini.ready.tracker;
+    let mouse = this.tracker;
+    // let mouse = await mini.ready.tracker;
 
     this.fillVirtualLookUpTexture(virtualLookUpTexture);
     this.fillPositionTexture(dtPosition, mouse);
@@ -481,8 +498,9 @@ class LokLokHairBallSimulation {
 }
 
 class LokLokWiggleDisplay {
-  constructor({ mini, sim }) {
+  constructor({ tracker, mini, sim }) {
     this.mini = mini;
+    this.tracker = tracker;
     this.sim = sim;
     this.wait = this.setup({ mini });
   }
@@ -895,12 +913,14 @@ class NoodleGeo {
 
 export class SpiritGeo {
   //
-  constructor({ mini }) {
+  constructor({ mini, tracker }) {
     this.mini = mini;
+    this.tracker = tracker;
     this.setup({ mini });
   }
 
   async setup({ mini }) {
+    let tracker = this.tracker;
     let WIDTH = 1;
     let HEIGHT = 128;
     let SCAN_COUNT = WIDTH * HEIGHT;
@@ -912,6 +932,7 @@ export class SpiritGeo {
       mini: mini,
       width: WIDTH,
       height: HEIGHT,
+      tracker,
     });
 
     this.onReset = () => {
@@ -923,9 +944,10 @@ export class SpiritGeo {
       virtual,
       numberOfScans: SCAN_COUNT,
       trailSize: TAIL_LENGTH,
+      tracker,
     });
 
-    let display = new LokLokWiggleDisplay({ mini, sim });
+    let display = new LokLokWiggleDisplay({ mini, sim, tracker });
 
     mini.onLoop(() => {
       sim.render({});
