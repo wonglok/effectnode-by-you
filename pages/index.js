@@ -2,6 +2,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { firebaseConfig } from "../vfx-cms/CONFIG";
+import { Bloomer } from "../vfx-library/Bloomer";
 import { InteractionUI } from "../vfx-library/InteractionUI";
 import { ENRuntime, getCodes } from "../vfx-runtime/ENRuntime";
 
@@ -23,6 +24,7 @@ export default function IndexPage({ graphA }) {
     <div ref={ref} className="w-full h-full">
       <Canvas dpr={[1, 3]}>
         {graphA && <ContentA json={graphA}></ContentA>}
+        <Bloomer></Bloomer>
       </Canvas>
     </div>
   );

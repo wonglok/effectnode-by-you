@@ -16,26 +16,26 @@ import {
   Color,
 } from "three";
 import { Geometry } from "three/examples/jsm/deprecated/Geometry.js";
-// import { enableBloom } from "../../Bloomer/Bloomer";
+import { enableBloom } from "./Bloomer";
 // import { curlNoise } from "../avatar/curl";
 // import { ShaderCubeChrome } from "../../Shaders/ShaderCubeChrome";
-import { TextureLoader } from "three";
+// import { TextureLoader } from "three";
 import { InteractionUI } from "./InteractionUI";
-import { sleep } from "../vfx-runtime/ENUtils";
+// import { sleep } from "../vfx-runtime/ENUtils";
 
-let enableBloom = (v) => console.log("enable bloom placeholder", v);
+// let enableBloom = (v) => console.log("enable bloom placeholder", v);
 
 export const example = async ({ mini }) => {
   // await mini.ready.SceneDisplayed;
-  let gl = await mini.ready.gl;
-  let scene = await mini.ready.scene;
+  // let gl = await mini.ready.gl;
+  // let scene = await mini.ready.scene;
 
   let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
   setTimeout(() => {
     vec3Mouse.x = 0;
     vec3Mouse.y = 0;
     vec3Mouse.z = 1;
-  });
+  }, 10);
 
   let tt = setInterval(() => {
     if (vec3Mouse.length() !== 0) {
