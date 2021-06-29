@@ -28,6 +28,7 @@ export class InteractionUI {
       clean2();
     };
   }
+
   static async hoverPlane({ mini }) {
     let raycaster = await mini.ready.raycaster;
     let mouse = await mini.ready.mouse;
@@ -51,8 +52,8 @@ export class InteractionUI {
     let planeMesh = new Mesh(geoPlane, matPlane);
     planeMesh.position.z = -camera.position.z / 2;
 
-    mini.onResize(async () => {
-      let viewport = await mini.ready.viewport;
+    mini.onResize(() => {
+      let viewport = mini.now.viewport;
       let geoPlane = new PlaneBufferGeometry(
         3.0 * viewport.width,
         3.0 * viewport.height,

@@ -1,3 +1,4 @@
+import { OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -25,6 +26,8 @@ export default function IndexPage({ graphA }) {
       <Canvas dpr={[1, 3]}>
         {graphA && <ContentA json={graphA}></ContentA>}
         <Bloomer></Bloomer>
+
+        <OrbitControls></OrbitControls>
       </Canvas>
     </div>
   );
