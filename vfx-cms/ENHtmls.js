@@ -218,10 +218,13 @@ function NodePanel() {
           <div key={e._fid} className="ml-3 mb-3 text  underline">
             <div
               className=" cursor-pointer"
-              onPointerDown={() => {
-                //
-                ENMethods.removeLinkByID({ linkID: e._fid });
-                reload((s) => s + 1);
+              onPointerDown={(ev) => {
+                if (ev.currentTarget.style.color === "red") {
+                  //
+                  ENMethods.removeLinkByID({ linkID: e._fid });
+                  reload((s) => s + 1);
+                }
+                ev.currentTarget.style.color = "red";
               }}
             >
               {/*  */}
@@ -252,8 +255,11 @@ function NodePanel() {
             <div
               className=" cursor-pointer"
               onPointerDown={() => {
-                ENMethods.removeLinkByID({ linkID: e._fid });
-                reload((s) => s + 1);
+                if (ev.currentTarget.style.color === "red") {
+                  ENMethods.removeLinkByID({ linkID: e._fid });
+                  reload((s) => s + 1);
+                }
+                ev.currentTarget.style.color = "red";
               }}
             >
               {/*  */}
