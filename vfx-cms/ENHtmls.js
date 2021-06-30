@@ -202,9 +202,11 @@ function NodePanel() {
         </div>
       </div>
 
-      <div className="p-3 text-xl font-serif ">
-        <div className=" cursor-pointer">Inputs</div>
-      </div>
+      {inputLinks.length > 0 && (
+        <div className="p-3 text-xl font-serif ">
+          <div className=" cursor-pointer">Inputs</div>
+        </div>
+      )}
 
       {inputLinks.map((e) => {
         let localID = e.data.input._id;
@@ -237,9 +239,11 @@ function NodePanel() {
         );
       })}
 
-      <div className="p-3 text-xl font-serif">
-        <div className=" cursor-pointer">Outputs</div>
-      </div>
+      {outputLinks.length > 0 && (
+        <div className="p-3 text-xl font-serif ">
+          <div className=" cursor-pointer">Outputs</div>
+        </div>
+      )}
 
       {outputLinks.map((e) => {
         let localID = e.data.output._id;
@@ -273,7 +277,7 @@ function NodePanel() {
       })}
 
       <div className="p-3 text-xl font-serif ">
-        <div className=" cursor-pointer">Remove</div>
+        <div className=" cursor-pointer">Remove Node & Connections</div>
       </div>
 
       <div className="p-3 underline">
@@ -286,7 +290,7 @@ function NodePanel() {
             }
           }}
         >
-          Remove Code Block & Connections
+          Remove
         </div>
       </div>
     </div>
