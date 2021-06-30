@@ -924,7 +924,7 @@ export class SpiritGeo {
     let WIDTH = 1;
     let HEIGHT = 128;
     let SCAN_COUNT = WIDTH * HEIGHT;
-    let TAIL_LENGTH = 128;
+    let TAIL_LENGTH = 64;
 
     let virtual = new LokLokGravitySimulation({
       mini: mini,

@@ -3,9 +3,9 @@ import { setupFirebase, firebase } from "./firebase";
 import { DevToolNotice } from "../pages/effectnode";
 
 export function LogoutPage() {
-  if (process.env.NODE_ENV === "production") {
-    return <DevToolNotice></DevToolNotice>;
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   return <DevToolNotice></DevToolNotice>;
+  // }
 
   return (
     <div className="w-full h-full flex items-center justify-center">

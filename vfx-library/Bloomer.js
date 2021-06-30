@@ -161,13 +161,13 @@ export function Bloomer({ myScene = false }) {
   // let materials = {};
   const darkMaterial = new MeshBasicMaterial({
     color: new Color("#000000"),
-    skinning: true,
+    // skinning: true,
   });
 
   // let materials = {};
   const darkMaterial2 = new MeshBasicMaterial({
     color: new Color("#000000"),
-    skinning: true,
+    // skinning: true,
   });
 
   const BloomLayer = new Layers();

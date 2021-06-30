@@ -15,9 +15,9 @@ export function DevToolNotice() {
 }
 
 export default function Home() {
-  if (process.env.NODE_ENV === "production") {
-    return <DevToolNotice></DevToolNotice>;
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   return <DevToolNotice></DevToolNotice>;
+  // }
 
   return (
     <LoginChecker>

@@ -365,6 +365,11 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.1.1.tgz#9daf5745156fd84b8e9889a2dc721f0c58e894aa"
   integrity sha512-CAEbWH7OIur6jEOzaai83jq3FmKmv4PmX1JYfs9IrYcGEVI/lyL1EXJGCj7eFVJ0bg5QR8LMxBlEtA+xKiLpFw==
 
+"@mdx-js/react@^1.6.22":
+  version "1.6.22"
+  resolved "https://registry.yarnpkg.com/@mdx-js/react/-/react-1.6.22.tgz#ae09b4744fddc74714ee9f9d6f17a66e77c43573"
+  integrity sha512-TDoPum4SHdfPiGSAaRBw7ECyI8VaHpK8GJugbJIJuqyh6kzw9ZLJZW3HGL3NNrJGxcAixUvqROm+YuQOo5eXtg==
+
 "@next/env@10.1.3":
   version "10.1.3"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-10.1.3.tgz#29e5d62919b4a7b1859f8d36169848dc3f5ddebe"
@@ -1197,6 +1202,13 @@ detect-gpu@^3.0.0:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-3.1.5.tgz#04dfd7a88a92b7d3a651eb76e7a197f897e146a3"
   integrity sha512-clrCCOuEkwz2NeFi13uVgVfOI/mylyq19w4/XWdx3/vmd+pAnIbJvU17PT6os5G8CIx0Z0xkWBHws+bgm5LT8Q==
+  dependencies:
+    webgl-constants "^1.1.1"
+
+detect-gpu@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-3.1.6.tgz#6cd2d364d7a56b4d436ddaac822ba757802d2f4d"
+  integrity sha512-ZX/FdTwIB2F316OU6LqqCTtnaR76Vms0ZMKTaIyjzcFx0ImTYnqNdjq5Naofh+V7DcCJVDBE6J1zvcRe2RxI1g==
   dependencies:
     webgl-constants "^1.1.1"
 
