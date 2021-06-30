@@ -7,7 +7,7 @@ export async function effect({ mini, node }) {
   camera.position.z = 10;
   camera.lookAt(0, 0, 0);
 
-  let geo = new SphereBufferGeometry(10, 32, 32);
+  let geo = new SphereBufferGeometry(30, 32, 32);
   let mat = new MeshBasicMaterial({ color: 0xffffff, wireframe: true });
   let mesh = new Mesh(geo, mat);
   scene.add(mesh);
@@ -20,11 +20,3 @@ export async function effect({ mini, node }) {
     scene.remove(mesh);
   });
 }
-
-//
-//
-//
-
-//
-//
-//

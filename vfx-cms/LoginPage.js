@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { loginGoogle, setupFirebase, firebase } from "./firebase";
 import router from "next/router";
+import { DevToolNotice } from "../pages/effectnode";
 export function LoginPage() {
+  if (process.env.NODE_ENV === "production") {
+    return <DevToolNotice></DevToolNotice>;
+  }
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       <LoginWithGoogle></LoginWithGoogle>
