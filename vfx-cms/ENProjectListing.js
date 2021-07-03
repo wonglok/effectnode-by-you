@@ -46,9 +46,13 @@ export function ENProjectListing() {
       <table>
         <thead>
           <tr>
-            <th className="p-3 border  ">
+            <th className="p-3 border  " colSpan={1}>
               <span className="w-24 inline-block"></span>Title{" "}
               <span className="w-24 inline-block"></span>
+            </th>
+            <th className="p-3 border  " colSpan={1}>
+              <span className="w-3 inline-block"></span>CanvasID{" "}
+              <span className="w-3 inline-block"></span>
             </th>
             <th className="p-3 border " colSpan={3}>
               Actions
@@ -62,6 +66,7 @@ export function ENProjectListing() {
             return (
               <tr key={e._fid}>
                 <td className="p-3 m-3 border bg-white ">{e.data.title}</td>
+                <td className="p-3 m-3 border bg-white ">{e._fid}</td>
                 <td className="p-3 border m-0">
                   <button
                     className=" p-3 px-6 rounded-full bg-yellow-500 text-white"

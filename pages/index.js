@@ -67,9 +67,16 @@ export default function IndexPage({ graphA }) {
 function ContentA({ json }) {
   let three = useThree();
   let graph = useRef();
+  let [myInst, setCompos] = useState(() => {
+    return <group></group>;
+  });
 
   useEffect(() => {
     graph.current = new ENRuntime({ json, codes: getCodes() });
+
+    graph.current.mini.get("MyOwnComponentABC").then((v) => {
+      setCompos(v);
+    });
 
     return () => {
       graph.current.clean();
@@ -85,7 +92,7 @@ function ContentA({ json }) {
     }
   });
 
-  return null;
+  return <>{myInst}</>;
 }
 
 export async function getEffectNodeData(graphID) {

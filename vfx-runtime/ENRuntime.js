@@ -171,7 +171,9 @@ export class ENRuntime {
       features
         .loader()
         .then(async (logic) => {
-          return await logic.effect({ mini: this.mini, node: nodeAPI });
+          this.mini.get("all-ready").then(async () => {
+            return await logic.effect({ mini: this.mini, node: nodeAPI });
+          });
         })
         .then(() => {
           progress.done = true;

@@ -19,6 +19,8 @@ export async function effect({ mini, node }) {
   mini.onClean(() => {
     scene.remove(mesh);
   });
-}
 
-//
+  node.out0.pulse({
+    mesh,
+  });
+}
