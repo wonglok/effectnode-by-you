@@ -33,12 +33,12 @@ export default function Home() {
         <ENProjectAdd></ENProjectAdd>
         <ENProjectListing></ENProjectListing>
 
-        <br />
+        {/* <br />
         <hr />
         <br />
 
         <ENObjectAdd></ENObjectAdd>
-        <ENObjectListing></ENObjectListing>
+        <ENObjectListing></ENObjectListing> */}
       </div>
     </LoginChecker>
   );
