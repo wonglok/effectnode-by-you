@@ -60,6 +60,15 @@ export default function IndexPage({ graphA }) {
 
         <OrbitControls enableRotate={false} enablePan={false}></OrbitControls>
       </Canvas>
+
+      <div className="absolute top-0 right-0">
+        <a href="https://docs.effectnode.com/" target="_blank">
+          <button className="m-3 text-sm bg-white border p-3">Docs</button>
+        </a>
+        <a href="https://effectnode.com/" target="_blank">
+          <button className="m-3 text-sm bg-white border p-3">Home</button>
+        </a>
+      </div>
     </div>
   );
 }
@@ -74,7 +83,7 @@ function ContentA({ json }) {
   useEffect(() => {
     graph.current = new ENRuntime({ json, codes: getCodes() });
 
-    graph.current.mini.get("MyOwnComponentABC").then((v) => {
+    graph.current.mini.get("myCompos").then((v) => {
       setCompos(v);
     });
 
@@ -92,7 +101,7 @@ function ContentA({ json }) {
     }
   });
 
-  return <>{myInst}</>;
+  return <>{myInst && myInst}</>;
 }
 
 export async function getEffectNodeData(graphID) {
