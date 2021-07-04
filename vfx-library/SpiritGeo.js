@@ -139,6 +139,10 @@ export class LokLokGravitySimulation {
     mini.onLoop((dt, st) => {
       gpu.compute();
 
+      if (dt >= 16) {
+        dt = 16;
+      }
+
       this.positionUniforms["dt"] = { value: dt / 1000 };
       this.velocityUniforms.dt = { value: dt / 1000 };
 
@@ -263,9 +267,9 @@ export class LokLokGravitySimulation {
           theArray[i++] = initPosVec3.z;
           theArray[i++] = 1.0;
         } else {
-          theArray[i++] = Math.random() * 2.0 - 1.0;
-          theArray[i++] = Math.random() * 2.0 - 1.0;
-          theArray[i++] = Math.random() * 2.0 - 1.0;
+          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
+          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
+          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
           theArray[i++] = 1.0;
         }
       }
@@ -278,10 +282,13 @@ export class LokLokGravitySimulation {
     const theArray = texture.image.data;
     for (let y = 0; y < this.HEIGHT; y++) {
       for (let x = 0; x < this.WIDTH; x++) {
-        theArray[i++] = 1.0 * (Math.random() - 0.5);
-        theArray[i++] = 1.0 * (Math.random() - 0.5);
-        theArray[i++] = 1.0 * (Math.random() - 0.5);
+        //
+        theArray[i++] = 10.0 * (Math.random() - 0.5);
+        theArray[i++] = 10.0 * (Math.random() - 0.5);
+        theArray[i++] = 10.0 * (Math.random() - 0.5);
         theArray[i++] = 1.0;
+
+        //
       }
     }
     texture.needsUpdate = true;

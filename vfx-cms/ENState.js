@@ -5,6 +5,9 @@ export const ENState = makeShallowStore({
   listing: [],
   listingReload: 0,
 
+  layouts: [],
+  layoutsReload: 0,
+
   //
   canvasID: false,
   canvasOwnerID: false,

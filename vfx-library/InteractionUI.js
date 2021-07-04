@@ -15,17 +15,17 @@ export class InteractionUI {
       };
     };
 
-    let clean1 = onEvent(target, "touchstart", (ev) => {
+    let cleanTouchStart = onEvent(target, "touchstart", (ev) => {
       ev.preventDefault();
     });
 
-    let clean2 = onEvent(target, "toucmove", (ev) => {
+    let cleanTouchMove = onEvent(target, "toucmove", (ev) => {
       ev.preventDefault();
     });
 
     return () => {
-      clean1();
-      clean2();
+      cleanTouchStart();
+      cleanTouchMove();
     };
   }
 

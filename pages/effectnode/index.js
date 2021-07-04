@@ -4,6 +4,8 @@ import { ENWelcome } from "../../vfx-cms/ENWelcome";
 import { LoginChecker } from "../../vfx-cms/LoginChecker";
 import { ENProjectListing } from "../../vfx-cms/ENProjectListing";
 import { ENProjectAdd } from "../../vfx-cms/ENProjectAdd";
+import { ENObjectAdd } from "../../vfx-cms/ENObjectAdd";
+import { ENObjectListing } from "../../vfx-cms/ENObjectListing";
 
 export function DevToolNotice() {
   return (
@@ -23,8 +25,20 @@ export default function Home() {
     <LoginChecker>
       <div className="p-3 lg:p-12">
         <ENWelcome></ENWelcome>
+
+        <br />
+        <hr />
+        <br />
+
         <ENProjectAdd></ENProjectAdd>
         <ENProjectListing></ENProjectListing>
+
+        <br />
+        <hr />
+        <br />
+
+        <ENObjectAdd></ENObjectAdd>
+        <ENObjectListing></ENObjectListing>
       </div>
     </LoginChecker>
   );
