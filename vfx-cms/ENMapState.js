@@ -16,4 +16,7 @@ export const getDefaultMapState = () => ({
 
   viewMode: "roomView",
 });
+
+//
+
 export const ENMapState = makeShallowStore(getDefaultMapState());
