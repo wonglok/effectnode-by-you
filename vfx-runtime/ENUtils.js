@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { firebaseConfig } from "../vfx-cms/CONFIG";
 
 export const getID = function () {
   return (
@@ -190,6 +192,50 @@ export const useAutoEvent = function (ev, fnc) {
     };
   }, []);
 };
+
+export async function getEffectNodeData(graphID) {
+  return axios({
+    method: "GET",
+    url: `${firebaseConfig.databaseURL}canvas/${graphID}.json`,
+  }).then(
+    (response) => {
+      let ans = false;
+      for (let kn in response.data) {
+        if (!ans) {
+          ans = response.data[kn];
+        }
+      }
+      if (ans) {
+        let connections = [];
+
+        for (let kn in ans.connections) {
+          connections.push({
+            _fid: kn,
+            data: ans.connections[kn],
+          });
+        }
+
+        let nodes = [];
+        for (let kn in ans.nodes) {
+          nodes.push({
+            _fid: kn,
+            data: ans.nodes[kn],
+          });
+        }
+
+        return {
+          connections,
+          nodes,
+        };
+      } else {
+        return false;
+      }
+    },
+    () => {
+      return false;
+    }
+  );
+}
 
 //
 //
