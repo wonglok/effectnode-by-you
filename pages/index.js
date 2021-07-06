@@ -3,25 +3,16 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Bloomer } from "../vfx-library/Bloomer";
 import { InteractionUI } from "../vfx-library/InteractionUI";
-import { ENRuntime, getCodes } from "../vfx-runtime/ENRuntime";
 import { getGPUTier } from "detect-gpu";
-import { getEffectNodeData } from "../vfx-runtime/ENUtils";
-import { ENLogicGraph } from "../vfx-runtime/ENLogicGraph";
-
-export async function getStaticProps(context) {
-  return {
-    props: {
-      buildTimeCahce: {
-        myCanvas1: await getEffectNodeData(`-MdBQtfGPXXPkl-NuEoW`),
-      }, //
-    },
-  };
-}
+import { ENLogicGraphAutoLoad } from "../vfx-runtime/ENLogicGraph";
 
 export default function IndexPage({ buildTimeCahce }) {
   let ref = useRef();
 
+  //
   let [dpr, setDPR] = useState([1, 3]);
+
+  //
   useEffect(() => {
     return InteractionUI.fixTouchScreen({ target: ref.current });
   }, []);
@@ -54,11 +45,9 @@ export default function IndexPage({ buildTimeCahce }) {
         }}
         dpr={dpr}
       >
-        <Suspense fallback={null}>
-          {buildTimeCahce?.myCanvas1 && (
-            <ENLogicGraph json={buildTimeCahce.myCanvas1}></ENLogicGraph>
-          )}
-        </Suspense>
+        <ENLogicGraphAutoLoad
+          graphID={`-MdBQtfGPXXPkl-NuEoW`}
+        ></ENLogicGraphAutoLoad>
 
         <Bloomer></Bloomer>
 

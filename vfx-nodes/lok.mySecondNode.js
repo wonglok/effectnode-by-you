@@ -7,7 +7,7 @@ export function effect({ mini, node }) {
   });
   SpiritGeo.example({ mini });
 
-  mini.set("myCompos", <MyCompos></MyCompos>);
+  mini.set("DefaultComponent", <MyCompos></MyCompos>);
 }
 
 function MyCompos() {

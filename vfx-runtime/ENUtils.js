@@ -184,11 +184,12 @@ export const download = async (classRef, url) => {
   });
 };
 
-export const useAutoEvent = function (ev, fnc) {
+export const useAutoEvent = function (ev, fnc, target = () => {}) {
   useEffect(() => {
-    window.addEventListener(ev, fnc);
+    let tt = target() || window;
+    tt.addEventListener(ev, fnc, { passive: false });
     return () => {
-      window.removeEventListener(ev, fnc);
+      tt.removeEventListener(ev, fnc);
     };
   }, []);
 };

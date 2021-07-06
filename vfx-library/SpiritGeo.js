@@ -28,24 +28,26 @@ import { InteractionUI } from "./InteractionUI";
 export const example = async ({ mini }) => {
   // await mini.ready.SceneDisplayed;
   // let gl = await mini.ready.gl;
-  // let scene = await mini.ready.scene;
 
-  let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
-  setTimeout(() => {
-    vec3Mouse.x = 0;
-    vec3Mouse.y = 0;
-    vec3Mouse.z = 1;
-  }, 10);
+  // let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
+  let vec3Mouse = new Vector3(0, 0, 1);
+  // setTimeout(() => {
+  //   vec3Mouse.x = 0;
+  //   vec3Mouse.y = 0;
+  //   vec3Mouse.z = 1;
+  // }, 10);
 
-  let tt = setInterval(() => {
-    if (vec3Mouse.length() !== 0) {
-      clearInterval(tt);
+  mini.onLoop(async () => {
+    let mouse = await mini.ready.mouse;
+    let viewport = await mini.ready.viewport;
+    vec3Mouse.x = mouse.x * viewport.width;
+    vec3Mouse.y = mouse.y * viewport.height;
+    vec3Mouse.z = 0;
+  });
 
-      let wiggle = new SpiritGeo({
-        mini: mini,
-        tracker: vec3Mouse,
-      });
-    }
+  let wiggle = new SpiritGeo({
+    mini: mini,
+    tracker: vec3Mouse,
   });
 
   // mini.set("tracker", vec3Mouse);
@@ -512,7 +514,7 @@ class LokLokWiggleDisplay {
     this.wait = this.setup({ mini });
   }
   async setup({ mini }) {
-    let scene = await mini.ready.scene;
+    let mounter = await mini.ready.mounter;
 
     // let camera = await mini.ready.camera;
     // let renderer = await mini.ready.gl;
@@ -713,9 +715,9 @@ class LokLokWiggleDisplay {
 
     enableBloom(line0);
 
-    scene.add(line0);
+    mounter.add(line0);
     mini.onClean(() => {
-      scene.remove(line0);
+      mounter.remove(line0);
     });
 
     await this.sim.wait;
