@@ -35,7 +35,7 @@ export const example = async ({ mini }) => {
     vec3Mouse.x = 0;
     vec3Mouse.y = 0;
     vec3Mouse.z = 1;
-  }, 10);
+  }, 190);
 
   let tt = setInterval(() => {
     if (vec3Mouse.length() !== 0) {
