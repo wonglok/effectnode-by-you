@@ -47,9 +47,9 @@ export default function IndexPage() {
           }}
           dpr={dpr}
         >
-          {/* content-firework */}
+          {/* content-sphere */}
           <ENLogicGraphAutoLoad
-            graphID={"-Mdt9_VlG9tbWg1yUiuo"}
+            graphID={"-MeEh5Zzuo7Or531zhYf"}
           ></ENLogicGraphAutoLoad>
 
           <Bloomer></Bloomer>

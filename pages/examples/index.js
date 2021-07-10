@@ -6,9 +6,9 @@ export default function IndexPage() {
 
   //
   let [src, setSRC] = useState("about:blank");
+  let [menu, setMenu] = useState(false);
 
   let [width, setWidth] = useState(500);
-  let [menu, setMenu] = useState(false);
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -16,6 +16,39 @@ export default function IndexPage() {
   useAutoEvent("resize", () => {
     setWidth(window.innerWidth);
   });
+
+  let list = useMemo(() => {
+    let rr = require.context("./", false, /\.js$/, "lazy");
+    let list = [];
+
+    let keys = rr.keys();
+
+    keys.forEach((kn) => {
+      if (kn.indexOf("index.js") === -1) {
+        list.push({
+          key: kn,
+          file: path.basename(kn),
+        });
+      }
+    });
+
+    return list;
+  }, []);
+
+  useEffect(() => {
+    setSRC((s) => {
+      if (s === "about:blank") {
+        if (list[0]) {
+          let l = list[0];
+          return `${path.join("/examples/", l.key.replace(".js", ""))}`;
+        }
+
+        return s;
+      } else {
+        return s;
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -84,6 +117,7 @@ export default function IndexPage() {
                 &larr; <span className="underline">Back Home</span>
               </a>
               <MyList
+                list={list}
                 onChoose={(v) => {
                   setSRC(v);
                 }}
@@ -115,10 +149,30 @@ export default function IndexPage() {
 
             {menu && (
               <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-90">
-                <a href={"/"} className=" block p-3">
+                <a
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    import(
+                      /* webpackPreload: true */ "animejs/lib/anime.es.js"
+                    ).then(({ default: anime }) => {
+                      anime({
+                        targets: `body`,
+                        opacity: 0,
+                        duration: 1000,
+                        easing: "easeInOutQuad",
+                        complete: () => {
+                          window.location.assign("/");
+                        },
+                      });
+                    });
+                  }}
+                  href={"/"}
+                  className=" block p-3"
+                >
                   &larr; <span className="underline">Back Home</span>
                 </a>
                 <MyList
+                  list={list}
                   onChoose={(v) => {
                     setSRC(v);
                     setMenu(() => {
@@ -173,34 +227,8 @@ export default function IndexPage() {
   );
 }
 
-function MyList({ onChoose = () => {} }) {
+function MyList({ list, onChoose = () => {} }) {
   let [active, setActive] = useState(false);
-
-  let list = useMemo(() => {
-    let rr = require.context("./", false, /\.js$/, "lazy");
-    let list = [];
-
-    let keys = rr.keys();
-
-    keys.forEach((kn) => {
-      if (kn.indexOf("index.js") === -1) {
-        list.push({
-          key: kn,
-          file: path.basename(kn),
-        });
-      }
-    });
-
-    return list;
-  }, []);
-
-  useEffect(() => {
-    let l = list[0];
-    if (l) {
-      setActive(l.key);
-      onChoose(`${path.join("/examples/", l.key.replace(".js", ""))}`);
-    }
-  }, []);
 
   return (
     <div>
