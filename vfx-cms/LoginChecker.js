@@ -44,6 +44,7 @@ export function LoginChecker({ children, canvasID = false }) {
 }
 
 /*
+//
 {
   "rules": {
     ".read": false,

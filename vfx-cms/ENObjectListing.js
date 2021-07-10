@@ -39,7 +39,7 @@ export function ENObjectListing() {
     });
   }, [ENState.layoutsReload]);
 
-  console.log(ENState.layoutsReload);
+  // console.log(ENState.layoutsReload);
 
   //
   return (

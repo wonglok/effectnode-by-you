@@ -4,6 +4,25 @@ import { ENRuntime, getCodes } from "./ENRuntime";
 import useSWR from "swr";
 import { getEffectNodeData } from "./ENUtils";
 
+export function ENLogicGraphAutoLoad({
+  graphID,
+  componentName,
+  progress = null,
+}) {
+  if (!graphID) {
+    console.error("need graphID");
+  }
+
+  return (
+    <Suspense fallback={progress}>
+      <ENGraphLoader
+        componentName={componentName}
+        graphID={graphID}
+      ></ENGraphLoader>
+    </Suspense>
+  );
+}
+
 export function ENLogicGraph({ json, componentName = "DefaultComponent" }) {
   let three = useThree();
   let graph = useRef();
@@ -44,25 +63,6 @@ export function ENLogicGraph({ json, componentName = "DefaultComponent" }) {
 }
 
 //
-
-export function ENLogicGraphAutoLoad({
-  graphID,
-  componentName,
-  progress = null,
-}) {
-  if (!graphID) {
-    console.error("need graphID");
-  }
-
-  return (
-    <Suspense fallback={progress}>
-      <ENGraphLoader
-        componentName={componentName}
-        graphID={graphID}
-      ></ENGraphLoader>
-    </Suspense>
-  );
-}
 
 function ENGraphLoader({ graphID, componentName }) {
   let { data, error } = useSWR(`${graphID}`, async (id) => {

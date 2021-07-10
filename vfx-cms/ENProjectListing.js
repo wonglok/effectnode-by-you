@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ENState } from "./ENState";
 import { onReady } from "./firebase";
 import router from "next/router";
-
+import copy from "copy-to-clipboard";
 //
 export function ENProjectListing() {
   //
@@ -67,6 +67,19 @@ export function ENProjectListing() {
               <tr key={e._fid}>
                 <td className="p-3 m-3 border bg-white ">{e.data.title}</td>
                 <td className="p-3 m-3 border bg-white ">{e._fid}</td>
+                <td className="p-3 border m-0">
+                  <button
+                    className=" p-3 px-6 rounded-full bg-green-500 text-white"
+                    onClick={() => {
+                      //
+                      copy(`
+                      {/* ${e.data.title} */}
+                      <ENLogicGraphAutoLoad graphID={"${e._fid}"} ></ENLogicGraphAutoLoad>`);
+                    }}
+                  >
+                    Copy Code
+                  </button>
+                </td>
                 <td className="p-3 border m-0">
                   <button
                     className=" p-3 px-6 rounded-full bg-yellow-500 text-white"

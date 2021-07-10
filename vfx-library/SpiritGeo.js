@@ -28,26 +28,24 @@ import { InteractionUI } from "./InteractionUI";
 export const example = async ({ mini }) => {
   // await mini.ready.SceneDisplayed;
   // let gl = await mini.ready.gl;
+  // let scene = await mini.ready.scene;
 
-  // let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
-  let vec3Mouse = new Vector3(0, 0, 1);
-  // setTimeout(() => {
-  //   vec3Mouse.x = 0;
-  //   vec3Mouse.y = 0;
-  //   vec3Mouse.z = 1;
-  // }, 10);
+  let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
+  setTimeout(() => {
+    vec3Mouse.x = 0;
+    vec3Mouse.y = 0;
+    vec3Mouse.z = 1;
+  }, 10);
 
-  mini.onLoop(async () => {
-    let mouse = await mini.ready.mouse;
-    let viewport = await mini.ready.viewport;
-    vec3Mouse.x = mouse.x * viewport.width;
-    vec3Mouse.y = mouse.y * viewport.height;
-    vec3Mouse.z = 0;
-  });
+  let tt = setInterval(() => {
+    if (vec3Mouse.length() !== 0) {
+      clearInterval(tt);
 
-  let wiggle = new SpiritGeo({
-    mini: mini,
-    tracker: vec3Mouse,
+      let wiggle = new SpiritGeo({
+        mini: mini,
+        tracker: vec3Mouse,
+      });
+    }
   });
 
   // mini.set("tracker", vec3Mouse);
@@ -140,10 +138,6 @@ export class LokLokGravitySimulation {
 
     mini.onLoop((dt, st) => {
       gpu.compute();
-
-      if (dt >= 16) {
-        dt = 16;
-      }
 
       this.positionUniforms["dt"] = { value: dt / 1000 };
       this.velocityUniforms.dt = { value: dt / 1000 };
@@ -269,9 +263,9 @@ export class LokLokGravitySimulation {
           theArray[i++] = initPosVec3.z;
           theArray[i++] = 1.0;
         } else {
-          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
-          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
-          theArray[i++] = (Math.random() * 2.0 - 1.0) * 1.0;
+          theArray[i++] = Math.random() * 2.0 - 1.0;
+          theArray[i++] = Math.random() * 2.0 - 1.0;
+          theArray[i++] = Math.random() * 2.0 - 1.0;
           theArray[i++] = 1.0;
         }
       }
@@ -284,13 +278,10 @@ export class LokLokGravitySimulation {
     const theArray = texture.image.data;
     for (let y = 0; y < this.HEIGHT; y++) {
       for (let x = 0; x < this.WIDTH; x++) {
-        //
-        theArray[i++] = 10.0 * (Math.random() - 0.5);
-        theArray[i++] = 10.0 * (Math.random() - 0.5);
-        theArray[i++] = 10.0 * (Math.random() - 0.5);
+        theArray[i++] = 1.0 * (Math.random() - 0.5);
+        theArray[i++] = 1.0 * (Math.random() - 0.5);
+        theArray[i++] = 1.0 * (Math.random() - 0.5);
         theArray[i++] = 1.0;
-
-        //
       }
     }
     texture.needsUpdate = true;
@@ -514,7 +505,7 @@ class LokLokWiggleDisplay {
     this.wait = this.setup({ mini });
   }
   async setup({ mini }) {
-    let mounter = await mini.ready.mounter;
+    let scene = await mini.ready.scene;
 
     // let camera = await mini.ready.camera;
     // let renderer = await mini.ready.gl;
@@ -715,9 +706,9 @@ class LokLokWiggleDisplay {
 
     enableBloom(line0);
 
-    mounter.add(line0);
+    scene.add(line0);
     mini.onClean(() => {
-      mounter.remove(line0);
+      scene.remove(line0);
     });
 
     await this.sim.wait;
@@ -933,7 +924,7 @@ export class SpiritGeo {
     let WIDTH = 1;
     let HEIGHT = 128;
     let SCAN_COUNT = WIDTH * HEIGHT;
-    let TAIL_LENGTH = 64;
+    let TAIL_LENGTH = 128;
 
     let virtual = new LokLokGravitySimulation({
       mini: mini,

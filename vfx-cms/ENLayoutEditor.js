@@ -67,7 +67,9 @@ function LayoutCanvas() {
       ref.current.addEventListener("wheel", fnc, { passive: false });
 
       return () => {
-        ref.current.removeEventListener("wheel", fnc);
+        if (ref.current) {
+          ref.current.removeEventListener("wheel", fnc);
+        }
       };
     }
   }, []);
