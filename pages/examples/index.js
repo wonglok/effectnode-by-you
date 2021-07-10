@@ -97,12 +97,20 @@ export default function IndexPage() {
                 width: `calc(100% - 250px)`,
               }}
             >
-              <iframe className={"h-full w-full"} src={src}></iframe>
+              <iframe
+                id="myframe"
+                className={"h-full w-full"}
+                src={src}
+              ></iframe>
             </div>
           </div>
         ) : (
           <div className="w-full h-full relative">
-            <iframe className={" h-full w-full"} src={src}></iframe>
+            <iframe
+              id="myframe"
+              className={" h-full w-full"}
+              src={src}
+            ></iframe>
 
             {!menu && (
               <div className="absolute top-0 right-0 m-3">
@@ -169,9 +177,10 @@ export default function IndexPage() {
 }
 
 function MyList({ onChoose = () => {} }) {
-  let rr = require.context("./", false, /\.js$/, "lazy");
+  let [active, setActive] = useState(false);
 
   let list = useMemo(() => {
+    let rr = require.context("./", false, /\.js$/, "lazy");
     let list = [];
 
     let keys = rr.keys();
@@ -197,15 +206,17 @@ function MyList({ onChoose = () => {} }) {
 
   return (
     <div>
-      <div className={"p-3 text-lg"}>Examples</div>
+      <div className={"p-3 text-lg "}>Examples</div>
       {list.map((l) => {
-        //
-
         //
         return (
           <div
-            className="mb-3 px-3 cursor-pointer"
-            onClick={() => {
+            className={`py-2 px-6 transition-colors duration-1000 cursor-pointer ${
+              active === l.key ? "bg-green-500 text-white" : ""
+            }`}
+            onClick={(ev) => {
+              ev.preventDefault();
+              setActive(l.key);
               onChoose(`${path.join("/examples/", l.key.replace(".js", ""))}`);
             }}
             key={l.key}
