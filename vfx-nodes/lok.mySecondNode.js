@@ -1,11 +1,9 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import * as SpiritGeo from "../vfx-library/SpiritGeo";
 export function effect({ mini, node }) {
   node.in0.stream((v) => {
     console.log(v);
   });
-  SpiritGeo.example({ mini });
 
   mini.set("DefaultComponent", <MyCompos></MyCompos>);
 }

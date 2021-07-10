@@ -105,14 +105,11 @@ export default function IndexPage() {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative bg-gray-100">
             <iframe
               id="myframe"
               className={" h-full w-full"}
-              style={{
-                height: "calc(100% - 45px)",
-                marginTop: "45px",
-              }}
+              style={{}}
               src={src}
             ></iframe>
 
@@ -132,8 +129,8 @@ export default function IndexPage() {
               </div>
             )}
 
-            {!menu && (
-              <div className="absolute top-0 right-0 m-3">
+            {menu && (
+              <div className="absolute top-0 right-0 m-3 bg-white p-3">
                 <svg
                   width="24"
                   height="24"
@@ -141,9 +138,24 @@ export default function IndexPage() {
                   fillRule="evenodd"
                   clipRule="evenodd"
                   onClick={() => {
-                    setMenu((m) => {
-                      return !m;
-                    });
+                    setMenu(false);
+                  }}
+                >
+                  <path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z" />
+                </svg>
+              </div>
+            )}
+
+            {!menu && (
+              <div className="absolute top-0 right-0 m-3 bg-white p-3">
+                <svg
+                  width="24"
+                  height="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  onClick={() => {
+                    setMenu(true);
                   }}
                 >
                   <path
@@ -151,24 +163,6 @@ export default function IndexPage() {
                     fill="#1040e2"
                   />
                   <path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z" />
-                </svg>
-              </div>
-            )}
-            {menu && (
-              <div className="absolute top-0 right-0 m-3">
-                <svg
-                  width="24"
-                  height="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  onClick={() => {
-                    setMenu((m) => {
-                      return !m;
-                    });
-                  }}
-                >
-                  <path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z" />
                 </svg>
               </div>
             )}

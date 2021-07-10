@@ -14,6 +14,7 @@ import {
   DataUtils,
   RGBFormat,
   Color,
+  Object3D,
 } from "three";
 import { Geometry } from "three/examples/jsm/deprecated/Geometry.js";
 import { enableBloom } from "./Bloomer";
@@ -29,25 +30,6 @@ export const example = async ({ mini }) => {
   // await mini.ready.SceneDisplayed;
   // let gl = await mini.ready.gl;
   // let scene = await mini.ready.scene;
-
-  let vec3Mouse = await InteractionUI.hoverPlane({ mini: mini });
-  setTimeout(() => {
-    vec3Mouse.x = 0;
-    vec3Mouse.y = 0;
-    vec3Mouse.z = 1;
-  }, 190);
-
-  let tt = setInterval(() => {
-    if (vec3Mouse.length() !== 0) {
-      clearInterval(tt);
-
-      let wiggle = new SpiritGeo({
-        mini: mini,
-        tracker: vec3Mouse,
-      });
-    }
-  });
-
   // mini.set("tracker", vec3Mouse);
 };
 
@@ -499,6 +481,7 @@ class LokLokHairBallSimulation {
 
 class LokLokWiggleDisplay {
   constructor({ tracker, mini, sim }) {
+    this.o3d = new Object3D();
     this.mini = mini;
     this.tracker = tracker;
     this.sim = sim;
@@ -706,9 +689,9 @@ class LokLokWiggleDisplay {
 
     enableBloom(line0);
 
-    scene.add(line0);
+    this.o3d.add(line0);
     mini.onClean(() => {
-      scene.remove(line0);
+      this.o3d.remove(line0);
     });
 
     await this.sim.wait;
@@ -946,6 +929,10 @@ export class SpiritGeo {
     });
 
     let display = new LokLokWiggleDisplay({ mini, sim, tracker });
+
+    this.display = display;
+
+    this.o3d = this.display.o3d;
 
     mini.onLoop(() => {
       sim.render({});
