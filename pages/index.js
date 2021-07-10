@@ -5,6 +5,7 @@ import { Bloomer } from "../vfx-library/Bloomer";
 import { InteractionUI } from "../vfx-library/InteractionUI";
 import { getGPUTier } from "detect-gpu";
 import { ENLogicGraphAutoLoad } from "../vfx-runtime/ENLogicGraph";
+// import anime from ;
 
 export default function IndexPage() {
   let ref = useRef();
@@ -57,17 +58,41 @@ export default function IndexPage() {
         </Canvas>
       </div>
       <div className="absolute top-0 right-0">
-        <a href="/examples" target="_blank">
+        <a
+          href="/examples"
+          onClick={(ev) => {
+            ev.preventDefault();
+            import(/* webpackPreload: true */ "animejs/lib/anime.es.js").then(
+              ({ default: anime }) => {
+                anime({
+                  targets: `body`,
+                  opacity: 0,
+                  duration: 1000,
+                  easing: "easeInOutQuad",
+                  complete: () => {
+                    window.location.assign("/examples");
+                  },
+                });
+              }
+            );
+          }}
+        >
           <button className="m-3 text-sm bg-white border p-3">Examples</button>
         </a>
-        <a href="https://docs.effectnode.com/" target="_blank">
-          <button className="m-3 text-sm bg-white border p-3">Docs</button>
-        </a>
-        <a href="https://effectnode.com/" target="_blank">
-          <button className="m-3 text-sm bg-white border p-3">Home</button>
-        </a>
+
         <a href="/effectnode" target="_blank">
           <button className="m-3 text-sm bg-white border p-3">CMS</button>
+        </a>
+
+        <a href="https://docs.effectnode.com/" target="_blank">
+          <button className="m-3 text-sm bg-white border p-3">
+            Docs &#8599;
+          </button>
+        </a>
+        <a href="https://effectnode.com/" target="_blank">
+          <button className="m-3 text-sm bg-white border p-3">
+            Home &#8599;
+          </button>
         </a>
       </div>
     </>
