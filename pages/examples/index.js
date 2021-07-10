@@ -109,8 +109,28 @@ export default function IndexPage() {
             <iframe
               id="myframe"
               className={" h-full w-full"}
+              style={{
+                height: "calc(100% - 45px)",
+                marginTop: "45px",
+              }}
               src={src}
             ></iframe>
+
+            {menu && (
+              <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-90">
+                <a href={"/"} className=" block p-3">
+                  &larr; <span className="underline">Back Home</span>
+                </a>
+                <MyList
+                  onChoose={(v) => {
+                    setSRC(v);
+                    setMenu(() => {
+                      return false;
+                    });
+                  }}
+                ></MyList>
+              </div>
+            )}
 
             {!menu && (
               <div className="absolute top-0 right-0 m-3">
@@ -134,23 +154,6 @@ export default function IndexPage() {
                 </svg>
               </div>
             )}
-
-            {menu && (
-              <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-90">
-                <a href={"/"} className=" block p-3">
-                  &larr; <span className="underline">Back Home</span>
-                </a>
-                <MyList
-                  onChoose={(v) => {
-                    setSRC(v);
-                    setMenu(() => {
-                      return false;
-                    });
-                  }}
-                ></MyList>
-              </div>
-            )}
-
             {menu && (
               <div className="absolute top-0 right-0 m-3">
                 <svg
