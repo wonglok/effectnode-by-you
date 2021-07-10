@@ -64,7 +64,7 @@ export function ENLogicGraph({ json, componentName = "DefaultComponent" }) {
 
 //
 
-function ENGraphLoader({ graphID, componentName }) {
+function ENGraphLoader({ graphID, componentName = "DefaultComponent" }) {
   let { data, error } = useSWR(`${graphID}`, async (id) => {
     let data = await getEffectNodeData(id);
     return data;
@@ -81,5 +81,17 @@ function ENGraphLoader({ graphID, componentName }) {
 
   return (
     <ENLogicGraph json={data} componentName={componentName}></ENLogicGraph>
+  );
+}
+
+export { getEffectNodeData };
+export function ENGraphJsonRunner({
+  json,
+  componentName = "DefaultComponent",
+}) {
+  //
+
+  return (
+    <ENLogicGraph json={json} componentName={componentName}></ENLogicGraph>
   );
 }

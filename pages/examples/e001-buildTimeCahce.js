@@ -4,13 +4,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Bloomer } from "../../vfx-library/Bloomer";
 import { InteractionUI } from "../../vfx-library/InteractionUI";
 import { getGPUTier } from "detect-gpu";
-import { ENLogicGraphAutoLoad } from "../../vfx-runtime/ENLogicGraph";
+import {
+  ENGraphJsonRunner,
+  getEffectNodeData,
+} from "../../vfx-runtime/ENLogicGraph";
 // import anime from ;
 
-export default function IndexPage() {
+let graphIDs = {
+  fireworks: "-Mdt9_VlG9tbWg1yUiuo",
+};
+
+export default function IndexPage({ fireworks }) {
   let ref = useRef();
 
   let [dpr, setDPR] = useState([1, 3]);
+
+  console.log("fireworks", fireworks);
 
   //
   useEffect(() => {
@@ -48,9 +57,9 @@ export default function IndexPage() {
           }}
           dpr={dpr}
         >
-          <ENLogicGraphAutoLoad
-            graphID={`-MdBQtfGPXXPkl-NuEoW`}
-          ></ENLogicGraphAutoLoad>
+          {fireworks && (
+            <ENGraphJsonRunner json={fireworks}></ENGraphJsonRunner>
+          )}
 
           <Bloomer></Bloomer>
 
@@ -59,4 +68,22 @@ export default function IndexPage() {
       </div>
     </>
   );
+}
+
+export async function getStaticProps(context) {
+  let data = await getEffectNodeData(graphIDs.fireworks);
+
+  if (!data) {
+    return {
+      props: {
+        fireworks: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      fireworks: data,
+    },
+  };
 }

@@ -29,7 +29,6 @@ export default function IndexPage() {
                 return;
               }
 
-              //
               if (v.fps < 30) {
                 setDPR([1, 1]);
                 return;
@@ -48,8 +47,9 @@ export default function IndexPage() {
           }}
           dpr={dpr}
         >
+          {/* content-firework */}
           <ENLogicGraphAutoLoad
-            graphID={`-MdBQtfGPXXPkl-NuEoW`}
+            graphID={"-Mdt9_VlG9tbWg1yUiuo"}
           ></ENLogicGraphAutoLoad>
 
           <Bloomer></Bloomer>
