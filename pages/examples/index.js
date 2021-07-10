@@ -200,6 +200,7 @@ function MyList({ onChoose = () => {} }) {
   useEffect(() => {
     let l = list[0];
     if (l) {
+      setActive(l.key);
       onChoose(`${path.join("/examples/", l.key.replace(".js", ""))}`);
     }
   }, []);
