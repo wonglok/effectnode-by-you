@@ -13,10 +13,22 @@ export async function effect({ mini, node }) {
   let viewport = await mini.ready.viewport;
 
   mounter.add(wiggle.o3d);
+  let t = 0;
   mini.onLoop(() => {
+    t += 1 / 60;
     let vp = viewport.getCurrentViewport();
     tracker.x = mouse.x * vp.width;
     tracker.y = mouse.y * vp.height;
-    tracker.z = 0;
+    tracker.z = Math.sin(t) * 2.0;
   });
 }
+
+//
+
+//
+
+//
+
+//
+
+//

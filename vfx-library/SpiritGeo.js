@@ -497,7 +497,7 @@ class LokLokWiggleDisplay {
       count: this.sim.NUMBER_OF_SCANS,
       numSides: 4,
       subdivisions: this.sim.WIDTH,
-      openEnded: true,
+      openEnded: false,
     });
 
     geometry.instanceCount = count;
