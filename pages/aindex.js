@@ -7,21 +7,21 @@ export default function Main() {
           Making VFX avaiable on the Web.
         </div>
 
-        <div className="m-3 border-blue-300 border-b"></div>
+        <div className="my-3 border-blue-300 border-b"></div>
 
+        <div className="text-xl mb-3">
+          Out of Box Setup Steps for you own Metaverse with VFX
+        </div>
         <ul className=" text text-gray-600 list-disc">
-          <li>AR/VR Immersive Editing View</li>
-          <li>Room Furniture Layout View</li>
-          <li>Wall Decoration View</li>
-
-          <li>Cable and Boxes Visual Programming</li>
-          <li>Procedral Content Support</li>
-          <li>Post Processing such as Selective Blooming</li>
+          <li>1. Go to your firebase and get the firebase config.</li>
+          <li>2. Go to your firebase adn set login permission config.</li>
         </ul>
       </div>
     </div>
   );
 }
+
+//
 
 //
 

@@ -29,6 +29,7 @@ export function getCodes() {
 export class ENRuntime {
   //
   constructor({ json, codes }) {
+    this.events = new EventEmitter();
     //
     // let codes = getCodes();
 
@@ -39,37 +40,11 @@ export class ENRuntime {
     }
     this.codes = codes;
 
-    // if (process.env.NODE_ENV === "development") {
-    //   module.hot.accept(
-    //     codes.map((e) => e.path), // Either a string or an array of strings
-    //     (v) => {
-    //       //
-    //       //
-    //       console.log(v);
-    //     }, // Function to fire when the dependencies are updated
-    //     (err, { moduleId, dependencyId }) => {
-    //       //
-    //     } // (err, {moduleId, dependencyId}) => {}
-    //   );
-    // }
-    //
-
-    //
     this.mini = new ENMini({});
 
     this.clean = () => {
       this.mini.clean();
     };
-
-    let total = [];
-
-    //
-    // let getPorts = (node) => {
-    //   return {}; //
-    // };
-    //
-
-    this.events = new EventEmitter();
 
     let on = (ev, h) => {
       this.events.addEventListener(ev, h);
@@ -93,19 +68,22 @@ export class ENRuntime {
 
       let features = codes.find((e) => e.title === title);
 
-      let mode = "queue";
-      this.mini.ready["all-ready"].then(() => {
-        mode = "can-send";
-        queue.forEach((ev) => {
-          emit(ev.event, ev.data);
-        });
-
-        //
-        // comments.log(ev);
-      });
-
-      let progress = { done: false };
-      total.push(progress);
+      // let mode = "queue";
+      // this.mini.ready["all-ready"].then(() => {
+      //   mode = "can-send";
+      //   queue.forEach((ev) => {
+      //     emit(ev.event, ev.data);
+      //   });
+      //   //
+      //   // comments.log(ev);
+      // });
+      // if (mode === "can-send") {
+      // } else {
+      //   queue.push({
+      //     event: output._id,
+      //     data,
+      //   });
+      // }
 
       let portsAPIMap = new Map();
 
@@ -116,21 +94,30 @@ export class ENRuntime {
       // portsAPIMap.set(`in${idx}`, {
       // });
 
+      let vm = this;
       inputs.forEach((input, idx) => {
+        let answer = false;
+
+        //
         let api = {
           stream: (onReceive) => {
             on(input._id, onReceive);
           },
           get ready() {
             return new Promise((resolve) => {
-              let hh = (data) => {
-                resolve(data);
-                this.events.removeEventListener(input._id, hh);
-              };
-              this.events.addEventListener(input._id, hh);
+              let tt = setInterval(() => {
+                if (answer) {
+                  clearInterval(tt);
+                  resolve(answer);
+                }
+              }, 0);
             });
           },
         };
+
+        on(input._id, (v) => {
+          answer = v;
+        });
 
         portsAPIMap.set(`in${idx}`, api);
       });
@@ -138,14 +125,7 @@ export class ENRuntime {
       outputs.forEach((output, idx) => {
         portsAPIMap.set(`out${idx}`, {
           pulse: (data) => {
-            if (mode === "queue") {
-              queue.push({
-                event: output._id,
-                data,
-              });
-            } else {
-              emit(output._id, data);
-            }
+            emit(output._id, data);
           },
         });
       });
@@ -171,26 +151,14 @@ export class ENRuntime {
       features
         .loader()
         .then(async (logic) => {
-          this.mini.get("all-ready").then(async () => {
-            return await logic.effect({ mini: this.mini, node: nodeAPI });
-          });
-        })
-        .then(() => {
-          progress.done = true;
+          return await logic.effect({ mini: this.mini, node: nodeAPI });
         })
         .catch((err) => {
           console.log(err);
-          progress.done = true;
         });
     });
 
-    let tt = setInterval(() => {
-      let ok = total.filter((e) => e.done).length === total.length;
-      if (ok) {
-        clearInterval(tt);
-        this.mini.set("all-ready", true);
-      }
-    });
+    this.mini.set("all-ready", true);
 
     // .forEach()
     // this.ports = new ENPorts({ mini, json });

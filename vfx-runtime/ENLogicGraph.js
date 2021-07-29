@@ -39,6 +39,7 @@ export function ENLogicGraph({ json, componentName = "DefaultComponent" }) {
     });
 
     return () => {
+      graph.current.mini.clean();
       graph.current.clean();
     };
   }, []);
