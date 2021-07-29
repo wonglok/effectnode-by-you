@@ -6,7 +6,9 @@ import {
   SphereBufferGeometry,
   Vector3,
 } from "three";
+import { DotToLine } from "../vfx-library/DotToLine";
 import { LocationSimulation } from "../vfx-library/LocationSimulation";
+import { RainyComet } from "../vfx-library/RainyComet";
 
 export async function effect({ mini, node }) {
   console.log(123);
@@ -20,7 +22,7 @@ export async function effect({ mini, node }) {
   let sceneObjects = [
     {
       type: "mouse-sphere",
-      radius: 1.7,
+      radius: 2.5,
     },
     {
       type: "static-sphere",
@@ -90,7 +92,7 @@ export async function effect({ mini, node }) {
     }
   }
 
-  let shaderCode = `
+  let shaderCode = /* glsl */ `
   #include <common>
 
   precision highp float;
@@ -140,8 +142,6 @@ export async function effect({ mini, node }) {
     }
   }
 
-  // 0001
-
   void handleCollision (inout vec4 pos, inout vec3 vel) {
     ${collisionCode}
   }
@@ -160,22 +160,21 @@ export async function effect({ mini, node }) {
 
     life -= .01 * ( rand( uv ) + 0.1 );
 
-    if( life > 1. ){
+    if( life >= 1. ){
       vel = vec3( 0. );
       pos.xyz = vec3(
         -0.5 + rand(uv + 0.1),
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-
       pos.xyz = ballify(pos.xyz, 1.5);
       pos.y += 5.0;
-      life = .99;
+      life = 0.99;
     }
 
     float bottomLimit = -7.0 + rand(uv + 0.1);
 
-    if( life < 0. || pos.y <= bottomLimit ){
+    if( life <= 0. || pos.y <= bottomLimit ){
       vel = vec3( 0. );
       pos.xyz = vec3(
         -0.5 + rand(uv + 0.1),
@@ -220,23 +219,40 @@ export async function effect({ mini, node }) {
       let res = rc.intersectObject(raycastPlane);
       if (res && res[0]) {
         let first = res[0];
-
         cursor.copy(first.point);
       }
     });
   });
 
-  //
-
-  new LocationSimulation({
+  let sim = new LocationSimulation({
     mini,
-    width: 256,
-    height: 256,
+    width: 2,
+    height: 128, //count
     shaderCode: shaderCode,
     sceneObjects: sceneObjects,
     renderer: await mini.ready.gl,
     mounter: await mini.ready.mounter,
     cursor: cursor,
     viewport: await mini.ready.viewport,
+  });
+
+  let dotSim = new DotToLine({
+    mini,
+    renderer: await mini.ready.gl,
+    dotSim: sim,
+    count: 2 * 128,
+    tailSize: 2 * 128,
+  });
+
+  let comet = new RainyComet({
+    sim: dotSim,
+    mini: mini,
+  });
+
+  mini.ready.mounter.then((m) => {
+    m.add(comet.o3d);
+    mini.onClean(() => {
+      m.remove(comet.o3d);
+    });
   });
 }

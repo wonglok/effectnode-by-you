@@ -1,3 +1,4 @@
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { getGPUTier } from "detect-gpu";
 import { useState } from "react";
@@ -47,6 +48,8 @@ export default function RainNoodle() {
         )}
 
         <Bloomer></Bloomer>
+
+        <OrbitControls></OrbitControls>
       </Canvas>
     </div>
   );

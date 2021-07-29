@@ -42,10 +42,13 @@ export class LocationSimulation {
     this.viewport = viewport;
     this.o3d = new Object3D();
 
-    this.done = this.setup();
-    this.particles();
-    this.renderSpheres();
+    this.wait = Promise.all([
+      this.setup(),
+      this.particles(),
+      this.renderSpheres(),
+    ]);
   }
+
   async setup() {
     this.tick = 0;
     this.clock = new Clock();
@@ -158,26 +161,37 @@ export class LocationSimulation {
           `,
       fragmentShader: /* glsl */ `
           void main (void) {
-            gl_FragColor = vec4(0.7, 0.7, 1.0, 0.4);
+            gl_FragColor = vec4(0.7, 0.7, 1.0, 1.0);
           }
           `,
+      transparent: true,
     });
+    //
     let particles = new Points(geoPt, matPt);
     particles.frustumCulled = false;
     this.mounter.add(particles);
     this.mini.onClean(() => {
-      this.mounter.remve(particles);
+      this.mounter.remove(particles);
     });
+
+    this.compute();
+    this.outputSimTexture = this.loopRTTPos[2];
 
     this.mini.onLoop(() => {
       if (this.filter0) {
         this.compute();
         let outdata = this.loopRTTPos[2];
+
+        this.outputSimTexture = outdata.texture;
         matPt.uniforms.nowPosTex.value = outdata.texture;
       }
     });
 
     console.log(this.mounter);
+  }
+
+  getTextureAfterCompute() {
+    return this.outputSimTexture;
   }
 
   renderSpheres() {
