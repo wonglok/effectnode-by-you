@@ -5,6 +5,7 @@ import {
   Clock,
   Color,
   DirectionalLight,
+  HalfFloatType,
   InstancedBufferAttribute,
   InstancedMesh,
   Mesh,

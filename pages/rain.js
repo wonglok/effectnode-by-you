@@ -1,15 +1,22 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { getGPUTier } from "detect-gpu";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bloomer } from "../vfx-library/Bloomer";
+import { InteractionUI } from "../vfx-library/InteractionUI";
 import { ENLogicGraphAutoLoad } from "../vfx-runtime/ENLogicGraph";
 
 export default function RainNoodle() {
+  let ref = useRef();
   let [dpr, setDPR] = useState([1, 3]);
   let [ok, setOK] = useState(false);
+
+  useEffect(() => {
+    return InteractionUI.fixTouchScreen({ target: ref.current });
+  }, []);
+
   return (
-    <div className="w-full h-full">
+    <div ref={ref} className="w-full h-full">
       <Canvas
         onCreated={({ gl }) => {
           getGPUTier({ glContext: gl.getContext() }).then((v) => {
