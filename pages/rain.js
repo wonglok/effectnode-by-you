@@ -49,7 +49,7 @@ export default function RainNoodle() {
 
         <Bloomer></Bloomer>
 
-        <OrbitControls></OrbitControls>
+        {/* <OrbitControls></OrbitControls> */}
       </Canvas>
     </div>
   );

@@ -5,6 +5,8 @@ import {
   Clock,
   Color,
   DirectionalLight,
+  InstancedBufferAttribute,
+  InstancedMesh,
   Mesh,
   MeshNormalMaterial,
   MeshStandardMaterial,
@@ -133,6 +135,7 @@ export class LocationSimulation {
     // let cameraUI = await this.mini.get("cameraUI");
 
     let geoPt = new BufferGeometry();
+    geoPt.copy(new SphereBufferGeometry(0.06, 8, 8));
     let uv = [];
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -140,11 +143,12 @@ export class LocationSimulation {
       }
     }
 
-    geoPt.setAttribute("uv", new BufferAttribute(new Float32Array(uv), 3));
     geoPt.setAttribute(
-      "position",
-      new BufferAttribute(new Float32Array(uv), 3)
+      "uvv",
+      new InstancedBufferAttribute(new Float32Array(uv), 3)
     );
+    // geoPt.setAttribute("lookup", new BufferAttribute(new Float32Array(uv), 3));
+
     let matPt = new ShaderMaterial({
       uniforms: {
         nowPosTex: {
@@ -153,22 +157,44 @@ export class LocationSimulation {
       },
       vertexShader: /* glsl */ `
           uniform sampler2D nowPosTex;
+          attribute vec3 uvv;
+
+          mat4 translate(vec3 d)
+          {
+            return mat4(1, 0, 0, d.x,
+                        0, 1, 0, d.y,
+                        0, 0, 1, d.z,
+                        0, 0, 0, 1);
+          }
+
+          mat4 scale(float c)
+          {
+            return mat4(c, 0, 0, 0,
+                        0, c, 0, 0,
+                        0, 0, c, 0,
+                        0, 0, 0, 1);
+          }
+
+
           void main (void) {
-            vec3 pos = texture2D(nowPosTex, uv.xy).xyz;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            vec3 pos = texture2D(nowPosTex, uvv.xy).xyz;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position + pos, 1.0);
             gl_PointSize = 1.0;
           }
           `,
       fragmentShader: /* glsl */ `
           void main (void) {
-            gl_FragColor = vec4(0.7, 0.7, 1.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
           }
           `,
       transparent: true,
     });
     //
-    let particles = new Points(geoPt, matPt);
+    let particles = new InstancedMesh(geoPt, matPt, this.width * this.height);
     particles.frustumCulled = false;
+    particles.instanceMatrix.needsUpdate = true;
+
     this.mounter.add(particles);
     this.mini.onClean(() => {
       this.mounter.remove(particles);

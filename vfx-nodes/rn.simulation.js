@@ -11,11 +11,7 @@ import { LocationSimulation } from "../vfx-library/LocationSimulation";
 import { RainyComet } from "../vfx-library/RainyComet";
 
 export async function effect({ mini, node }) {
-  console.log(123);
   let { ballify } = await node.in0.ready;
-  console.log(456);
-
-  console.log(ballify);
 
   let collisionCode = ``;
 
@@ -205,7 +201,7 @@ export async function effect({ mini, node }) {
 
   let camera = await mini.ready.camera;
 
-  camera.position.z = 20;
+  camera.position.z = 15;
   console.log(camera);
 
   let cursor = new Vector3(0, 0, 0);
@@ -226,8 +222,8 @@ export async function effect({ mini, node }) {
 
   let sim = new LocationSimulation({
     mini,
-    width: 2,
-    height: 128, //count
+    width: 1,
+    height: 200, //count
     shaderCode: shaderCode,
     sceneObjects: sceneObjects,
     renderer: await mini.ready.gl,
@@ -236,12 +232,14 @@ export async function effect({ mini, node }) {
     viewport: await mini.ready.viewport,
   });
 
+  let howManyLines = sim.width * sim.height;
+
   let dotSim = new DotToLine({
     mini,
     renderer: await mini.ready.gl,
     dotSim: sim,
-    count: 2 * 128,
-    tailSize: 2 * 128,
+    count: howManyLines,
+    tailSize: howManyLines,
   });
 
   let comet = new RainyComet({
