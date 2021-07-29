@@ -188,9 +188,29 @@ export class RainyComet {
           vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.0);
           gl_Position = projectionMatrix * mvPosition;
           vViewPosition = -mvPosition.xyz;
+
+
+          // if reset then stop
+          vec4 seg0 = texture2D(posTexture,
+            vec2(
+              vT + 0.0,
+              vOffset.w / lengthSegments //
+            )
+          );
+          vec4 seg1 = texture2D(posTexture,
+            vec2(
+              vT + 1.0 / lengthSegments,
+              vOffset.w / lengthSegments //
+            )
+          );
+
+          if (length(seg0.rgb - seg1.rgb) >= 0.3) {
+            gl_Position.w = 1.0;
+          }
         }
       `,
       fragmentShader: /* glsl */ `
+        precision highp float;
         #define lengthSegments ${subdivisions.toFixed(1)}
 
         varying float vT;
@@ -213,24 +233,7 @@ export class RainyComet {
 
           // vec4 matcapColor = texture2D( matcap, uv );
 
-          vec4 seg0 = texture2D(posTexture,
-            vec2(
-              vT  + 0.0,
-              vOffset.w / lengthSegments //
-            )
-          );
-          vec4 seg1 = texture2D(posTexture,
-            vec2(
-              vT + 1.0 / lengthSegments,
-              vOffset.w / lengthSegments //
-            )
-          );
-
-          if (length(seg0.rgb - seg1.rgb) > 0.3) {
-            discard;
-          } else {
-            gl_FragColor = vec4(vRainbow, pow(1.0 - vT, 3.0));
-          }
+          gl_FragColor = vec4(vRainbow, pow(1.0 - vT, 3.0));
 
         }
       `,
