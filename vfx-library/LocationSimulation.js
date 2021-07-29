@@ -1,4 +1,5 @@
 import {
+  AdditiveBlending,
   BoxBufferGeometry,
   BufferAttribute,
   BufferGeometry,
@@ -134,13 +135,32 @@ export class LocationSimulation {
     // let cameraUI = await this.mini.get("cameraUI");
 
     let geoPt = new BufferGeometry();
-    geoPt.copy(new SphereBufferGeometry(0.06, 8, 8));
+    geoPt.copy(new SphereBufferGeometry(0.07, 5, 5));
     let uv = [];
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         uv.push(x / this.width, y / this.height, 0.0);
       }
     }
+
+    let colorsVertexArray = [];
+    let colorSet = ["#ee4035", "#f37736", "#fdf498", "#7bc043", "#0392cf"];
+
+    // "#ffffff", "#d0e1f9", "#4d648d", "#283655", "#1e1f26"
+    // let colorSet = ["#00a8c6", "#40c0cb", "#f9f2e7", "#aee239", "#8fbe00"];
+
+    colorSet = ["#d11141", "#00b159", "#00aedb", "#f37735", "#ffc425"];
+    let count = this.width * this.height;
+    let colorVar = new Color();
+    for (let cc = 0; cc < count; cc++) {
+      colorVar.setStyle(colorSet[cc % colorSet.length]);
+      colorsVertexArray.push(colorVar.r, colorVar.g, colorVar.b);
+    }
+
+    geoPt.setAttribute(
+      "rainbow",
+      new InstancedBufferAttribute(new Float32Array(colorsVertexArray), 3)
+    );
 
     geoPt.setAttribute(
       "uvv",
@@ -157,6 +177,8 @@ export class LocationSimulation {
       vertexShader: /* glsl */ `
           uniform sampler2D nowPosTex;
           attribute vec3 uvv;
+          attribute vec3 rainbow;
+          varying vec3 vRainbow;
 
           mat4 translate(vec3 d)
           {
@@ -176,6 +198,7 @@ export class LocationSimulation {
 
 
           void main (void) {
+            vRainbow = rainbow;
             vec3 pos = texture2D(nowPosTex, uvv.xy).xyz;
 
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position + pos, 1.0);
@@ -183,10 +206,12 @@ export class LocationSimulation {
           }
           `,
       fragmentShader: /* glsl */ `
+        varying vec3 vRainbow;
           void main (void) {
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            gl_FragColor = vec4(vRainbow, 0.5);
           }
-          `,
+      `,
+      blending: AdditiveBlending,
       transparent: true,
     });
     //

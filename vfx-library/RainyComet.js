@@ -13,6 +13,7 @@ import {
   RGBFormat,
   Color,
   Object3D,
+  AdditiveBlending,
 } from "three";
 import { Geometry } from "three/examples/jsm/deprecated/Geometry.js";
 
@@ -29,7 +30,7 @@ export class RainyComet {
 
     let { geometry, subdivisions, count } = new NoodleGeo({
       count: /*simhere*/ this.sim.height,
-      numSides: 5,
+      numSides: 4,
       subdivisions: /*simhere*/ this.sim.width,
       openEnded: false,
     });
@@ -172,10 +173,10 @@ export class RainyComet {
           float tickness = 1.0;
 
           vec2 volume = vec2(
-            0.015 * tickness *
+            0.02 * tickness *
             ${this.invertedScale.toFixed(1)}
             ,
-            0.015 * tickness *
+            0.02 * tickness *
             ${this.invertedScale.toFixed(1)}
           );
           createTube(t, volume, transformed, objectNormal);
@@ -238,8 +239,8 @@ export class RainyComet {
         }
       `,
       transparent: true,
-      depthTest: true,
-      // blending: AdditiveBlending,
+      depthTest: false,
+      blending: AdditiveBlending,
     });
 
     let line0 = new Mesh(geometry, matLine0);
