@@ -208,11 +208,11 @@ export class LocationSimulation {
       fragmentShader: /* glsl */ `
         varying vec3 vRainbow;
           void main (void) {
-            gl_FragColor = vec4(vRainbow, 0.5);
+            gl_FragColor = vec4(vRainbow, 1.0);
           }
       `,
       blending: AdditiveBlending,
-      transparent: true,
+      // transparent: true,
     });
     //
     let particles = new InstancedMesh(geoPt, matPt, this.width * this.height);

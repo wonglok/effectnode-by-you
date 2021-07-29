@@ -374,7 +374,6 @@ class NoodleGeo {
     const posArray = new Float32Array(xPositions);
     const angleArray = new Float32Array(angles);
     const uvArray = new Float32Array(uvs.length * 2);
-
     const origPosArray = new Float32Array(oPositions);
 
     // unroll UVs

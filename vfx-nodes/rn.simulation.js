@@ -115,8 +115,9 @@ export async function effect({ mini, node }) {
   void collisionMouseSphere (inout vec4 particlePos, inout vec3 particleVel, float sphereRadius) {
     vec3 dif = (mouseNow) - particlePos.xyz;
 
-    if( length( dif ) < sphereRadius ){
-      particleVel -= normalize(dif) * dT * 1.0;
+    if (length(dif) < sphereRadius) {
+      particleVel += normalize(dif) * dT;
+
       vec3 mouseForce = mouseNow - mouseLast;
       particleVel += mouseForce * dT * 2.0;
     }
@@ -156,15 +157,15 @@ export async function effect({ mini, node }) {
 
     life -= .01 * ( rand( uv ) + 0.1 );
 
-    if( life >= 1. ){
+    if (life >= 1.) {
       vel = vec3( 0. );
       pos.xyz = vec3(
         -0.5 + rand(uv + 0.1),
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 2.5);
-      pos.y += 7.0;
+      pos.xyz = ballify(pos.xyz, 3.5);
+      pos.y += 6.0;
       life = 0.99;
     }
 
@@ -177,8 +178,8 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 2.5);
-      pos.y += 7.0;
+      pos.xyz = ballify(pos.xyz, 3.5);
+      pos.y += 6.0;
       life = 1.1;
     }
 
