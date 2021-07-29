@@ -29,7 +29,7 @@ export class RainyComet {
 
     let { geometry, subdivisions, count } = new NoodleGeo({
       count: /*simhere*/ this.sim.height,
-      numSides: 4,
+      numSides: 5,
       subdivisions: /*simhere*/ this.sim.width,
       openEnded: false,
     });
@@ -61,7 +61,7 @@ export class RainyComet {
         // varying vec2 vUv;
         varying vec3 vNormal;
         attribute vec4 offset;
-        varying vec4 vOffset;
+        // varying vec4 vOffset;
 
         uniform sampler2D posTexture;
         // uniform sampler2D handTexture;
@@ -157,7 +157,7 @@ export class RainyComet {
         varying vec3 vViewPosition;
 
         void main (void) {
-          vOffset = offset;
+          // vOffset = offset;
 
           vRainbow = rainbow;
           vec3 transformed;
@@ -194,13 +194,13 @@ export class RainyComet {
           vec4 seg0 = texture2D(posTexture,
             vec2(
               vT + 0.0,
-              vOffset.w / lengthSegments //
+              offset.w / lengthSegments //
             )
           );
           vec4 seg1 = texture2D(posTexture,
             vec2(
               vT + 1.0 / lengthSegments,
-              vOffset.w / lengthSegments //
+              offset.w / lengthSegments //
             )
           );
 
@@ -220,7 +220,7 @@ export class RainyComet {
         uniform sampler2D matcap;
         varying vec3 vRainbow;
 
-        varying vec4 vOffset;
+        // varying vec4 vOffset;
         uniform sampler2D posTexture;
 
 

@@ -12,10 +12,7 @@ import {
   MeshNormalMaterial,
   MeshStandardMaterial,
   Object3D,
-  PlaneBufferGeometry,
   PointLight,
-  Points,
-  Raycaster,
   ShaderMaterial,
   SphereBufferGeometry,
   Vector3,
@@ -60,6 +57,7 @@ export class LocationSimulation {
       this.height,
       this.renderer
     );
+
     if (/iPad|iPhone|iPod/.test(navigator.platform)) {
       this.gpu.setDataType(HalfFloatType);
     }
