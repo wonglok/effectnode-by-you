@@ -223,7 +223,7 @@ export async function effect({ mini, node }) {
   let sim = new LocationSimulation({
     mini,
     width: 1,
-    height: 200, //count
+    height: 256, //count
     shaderCode: shaderCode,
     sceneObjects: sceneObjects,
     renderer: await mini.ready.gl,
