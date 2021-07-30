@@ -203,8 +203,9 @@ export async function effect({ mini, node }) {
   `;
 
   let camera = await mini.ready.camera;
-
-  camera.position.z = 15;
+  camera.fov = 25;
+  camera.position.z = 40;
+  camera.updateProjectionMatrix();
   console.log(camera);
 
   let cursor = new Vector3(0, 0, 0);
