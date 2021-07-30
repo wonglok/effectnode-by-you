@@ -131,10 +131,6 @@ export class LocationSimulation {
   }
 
   async particles() {
-    // let camera = await this.mini.get("camera");
-    // let mounterUI = await this.mini.get("mounterUI");
-    // let cameraUI = await this.mini.get("cameraUI");
-
     let geoPt = new BufferGeometry();
     geoPt.copy(new SphereBufferGeometry(0.07, 5, 5));
     let uv = [];

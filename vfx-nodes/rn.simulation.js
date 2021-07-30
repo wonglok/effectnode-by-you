@@ -38,15 +38,26 @@ export async function effect({ mini, node }) {
       radius: 1.4,
     },
     {
-      type: "static-box",
-      position: new Vector3(0.0, -6.0, 0.0),
-      boxSize: new Vector3(5.0, 0.15, 5.0),
+      type: "static-sphere",
+      position: new Vector3(3.0, -6.0, 0.0),
+      radius: 2,
     },
-    {
-      type: "static-box",
-      position: new Vector3(0.9, 0.8, 0.0),
-      boxSize: new Vector3(1.0, 0.1, 1.0),
-    },
+
+    //
+
+    // {
+    //   type: "static-box",
+    //   position: new Vector3(0.0, -6.0, 0.0),
+    //   boxSize: new Vector3(5.0, 0.15, 5.0),
+    // },
+
+    //
+
+    // {
+    //   type: "static-box",
+    //   position: new Vector3(0.9, 0.8, 0.0),
+    //   boxSize: new Vector3(10.0, 0.1, 10.0),
+    // },
   ];
 
   for (let i = 0; i < sceneObjects.length; i++) {
@@ -92,7 +103,6 @@ export async function effect({ mini, node }) {
 
   let shaderCode = /* glsl */ `
   precision highp float;
-  precision highp sampler2D;
 
   #include <common>
 
@@ -160,7 +170,7 @@ export async function effect({ mini, node }) {
 
     vec3 vel = pos.xyz - oPos.xyz;
 
-    life -= .003 * ( rand( uv ) + 0.1 );
+    life -= .007 * ( rand( uv ) + 0.1 );
 
     if (life >= 1.) {
       vel = vec3( 0. );
@@ -169,12 +179,12 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 3.5);
+      pos.xyz = ballify(pos.xyz, 2.5);
       pos.y += 5.0;
       life = 0.99;
     }
 
-    float bottomLimit = -7.0 + rand(uv + 0.1);
+    float bottomLimit = -6.0 + rand(uv + 0.1);
 
     if( life <= 0. || pos.y <= bottomLimit ){
       vel = vec3( 0. );
@@ -183,16 +193,16 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 3.5);
+      pos.xyz = ballify(pos.xyz, 2.5);
       pos.y += 5.0;
       life = 1.1;
     }
 
     // gravity
-    vel += vec3(  0.0 , -0.003 ,0. );
+    vel += vec3(  0.0 , -0.004 ,0. );
 
     // wind
-    vel += vec3( 0.0005 * life, 0.0, 0.0 );
+    vel += vec3( 0.0003 * life, 0.0, 0.0 );
 
     handleCollision(pos, vel);
 
@@ -230,7 +240,7 @@ export async function effect({ mini, node }) {
   let sim = new LocationSimulation({
     mini,
     width: 2,
-    height: 96, //count
+    height: 64, //count
     shaderCode: shaderCode,
     sceneObjects: sceneObjects,
     renderer: await mini.ready.gl,
