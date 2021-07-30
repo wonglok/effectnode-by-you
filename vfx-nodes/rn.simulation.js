@@ -91,9 +91,12 @@ export async function effect({ mini, node }) {
   }
 
   let shaderCode = /* glsl */ `
+  precision highp float;
+  precision highp sampler2D;
+
   #include <common>
 
-  precision highp float;
+
   uniform highp sampler2D nowPosTex;
   uniform highp sampler2D lastPosTex;
   uniform float dT;
@@ -157,7 +160,7 @@ export async function effect({ mini, node }) {
 
     vec3 vel = pos.xyz - oPos.xyz;
 
-    life -= .01 * ( rand( uv ) + 0.1 );
+    life -= .003 * ( rand( uv ) + 0.1 );
 
     if (life >= 1.) {
       vel = vec3( 0. );
@@ -186,10 +189,10 @@ export async function effect({ mini, node }) {
     }
 
     // gravity
-    vel += vec3( 0.0 , -.003 , 0. );
+    vel += vec3(  0.0 , -0.003 ,0. );
 
     // wind
-    vel += vec3( 0.001 * life, 0.0, 0.0 );
+    vel += vec3( 0.0005 * life, 0.0, 0.0 );
 
     handleCollision(pos, vel);
 
