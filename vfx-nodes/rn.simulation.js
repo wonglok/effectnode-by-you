@@ -217,6 +217,8 @@ export async function effect({ mini, node }) {
 
   `;
 
+  let mounter = await mini.ready.mounter;
+
   let camera = await mini.ready.camera;
   camera.fov = 25;
   camera.position.z = 40;
@@ -226,10 +228,20 @@ export async function effect({ mini, node }) {
   let cursor = new Vector3(0, 0, 0);
 
   let plane = new PlaneBufferGeometry(2000, 2000, 2, 2);
-  let raycastPlane = new Mesh(plane);
+  let raycastPlane = new Mesh(
+    plane,
+    new MeshBasicMaterial({ color: 0x000000 })
+  );
+  // mounter.add(raycastPlane);
+  // mini.onClean(() => {
+  //   mounter.add(raycastPlane);
+  // });
+
   let rc = new Raycaster();
   mini.ready.mouse.then((m) => {
     mini.onLoop(() => {
+      raycastPlane.lookAt(camera.position);
+      raycastPlane.updateMatrix();
       rc.setFromCamera(m, camera);
       let res = rc.intersectObject(raycastPlane);
       if (res && res[0]) {
@@ -251,14 +263,14 @@ export async function effect({ mini, node }) {
     viewport: await mini.ready.viewport,
   });
 
-  let howManyLines = sim.width * sim.height;
+  let lineCount = sim.width * sim.height;
 
   let dotSim = new DotToLine({
     mini,
     renderer: await mini.ready.gl,
     dotSim: sim,
-    count: howManyLines,
-    tailSize: howManyLines,
+    count: lineCount,
+    tailSize: lineCount,
   });
 
   let comet = new RainyComet({

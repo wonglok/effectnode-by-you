@@ -10,57 +10,72 @@ export default function RainNoodle() {
   let ref = useRef();
   let [dpr, setDPR] = useState([1, 3]);
   let [ok, setOK] = useState(false);
+  let [enableOrbit, setOrbit] = useState(true);
 
   useEffect(() => {
+    if ("ontouchstart" in window) {
+      setOrbit(false);
+    }
     return InteractionUI.fixTouchScreen({ target: ref.current });
   }, []);
 
   return (
-    <div ref={ref} className="w-full h-full">
-      <Canvas
-        onCreated={({ gl }) => {
-          getGPUTier({ glContext: gl.getContext() }).then((v) => {
-            // ipad
-            if (v.gpu === "apple a9x gpu") {
-              setDPR([1, 1]);
+    <>
+      <div ref={ref} className="w-full h-full">
+        <Canvas
+          onCreated={({ gl }) => {
+            getGPUTier({ glContext: gl.getContext() }).then((v) => {
+              // ipad
+              if (v.gpu === "apple a9x gpu") {
+                setDPR([1, 1]);
+                setOK(true);
+                return;
+              }
+
+              //
+              if (v.fps < 30) {
+                setDPR([1, 1]);
+                setOK(true);
+                return;
+              }
+
+              if (v.tier >= 3) {
+                setDPR([1, 3]);
+              } else if (v.tier >= 2) {
+                setDPR([1, 2]);
+              } else if (v.tier >= 1) {
+                setDPR([1, 1]);
+              } else if (v.tier < 1) {
+                setDPR([1, 0.75]);
+              }
+
               setOK(true);
               return;
-            }
+            });
+          }}
+          dpr={dpr}
+        >
+          {/* simulated-rain-noodle */}
+          {ok && (
+            <ENLogicGraphAutoLoad
+              graphID={"-MffvLPL6dIsUEIf7GJ-"}
+            ></ENLogicGraphAutoLoad>
+          )}
 
-            //
-            if (v.fps < 30) {
-              setDPR([1, 1]);
-              setOK(true);
-              return;
-            }
+          <Bloomer></Bloomer>
 
-            if (v.tier >= 3) {
-              setDPR([1, 3]);
-            } else if (v.tier >= 2) {
-              setDPR([1, 2]);
-            } else if (v.tier >= 1) {
-              setDPR([1, 1]);
-            } else if (v.tier < 1) {
-              setDPR([1, 0.75]);
-            }
+          <OrbitControls enabled={enableOrbit}></OrbitControls>
+        </Canvas>
+      </div>
 
-            setOK(true);
-            return;
-          });
+      <button
+        onClick={() => {
+          setOrbit((s) => !s);
         }}
-        dpr={dpr}
+        className="absolute top-0 right-0 bg-white text-blue-500 m-3 p-3 px-6 rounded-full"
       >
-        {/* simulated-rain-noodle */}
-        {ok && (
-          <ENLogicGraphAutoLoad
-            graphID={"-MffvLPL6dIsUEIf7GJ-"}
-          ></ENLogicGraphAutoLoad>
-        )}
-
-        <Bloomer></Bloomer>
-
-        {/* <OrbitControls></OrbitControls> */}
-      </Canvas>
-    </div>
+        Toggle Rotation
+      </button>
+    </>
   );
 }

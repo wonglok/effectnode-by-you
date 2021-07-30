@@ -81,9 +81,6 @@ export class LocationSimulation {
       mouseNow.copy(this.cursor);
       mouseLast.copy(mouseNow);
       mouseNow.copy(mouse);
-
-      mouseLast.z = 0;
-      mouseNow.z = 0;
     });
 
     this.filter0 = this.gpu.createShaderMaterial(this.shaderCode, {
@@ -251,7 +248,6 @@ export class LocationSimulation {
     let mouseNow = new Vector3(0, 0, 0).copy(this.cursor);
     this.mini.onLoop(() => {
       mouseNow.copy(this.cursor);
-      mouseNow.z = 0;
     });
 
     //
