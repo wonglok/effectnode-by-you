@@ -184,7 +184,7 @@ export async function effect({ mini, node }) {
       life = 0.99;
     }
 
-    float bottomLimit = -6.0 + rand(uv + 0.1);
+    float bottomLimit = -10.0 + rand(uv + 0.1);
 
     if( life <= 0. || pos.y <= bottomLimit ){
       vel = vec3( 0. );

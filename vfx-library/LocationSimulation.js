@@ -258,7 +258,12 @@ export class LocationSimulation {
 
     let geoBall = new SphereBufferGeometry(1, 80, 80);
     let geoBox = new BoxBufferGeometry(1, 1, 1);
-    let matNormal = new MeshNormalMaterial({ opacity: 0.3, transparent: true });
+    let matNormal = new MeshNormalMaterial({
+      opacity: 0.3,
+      transparent: true,
+      depthTest: false,
+      // blending: AdditiveBlending,
+    });
     let matStd = new MeshStandardMaterial({
       opacity: 1,
       transparent: true,

@@ -240,7 +240,7 @@ export class RainyComet {
         }
       `,
       transparent: true,
-      depthTest: false,
+      // depthTest: false,
       // blending: AdditiveBlending,
     });
 
@@ -259,7 +259,7 @@ export class RainyComet {
       this.o3d.remove(line0);
     });
 
-    await /*simhere*/ this.sim.wait;
+    // await /*simhere*/ this.sim.wait;
 
     mini.onLoop(() => {
       let result = /*simhere*/ this.sim.getTextureAfterCompute();
