@@ -19,6 +19,7 @@ import {
   Vector3,
 } from "three";
 import { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer";
+import { enableBloom } from "./Bloomer";
 
 export class LocationSimulation {
   constructor({
@@ -211,13 +212,14 @@ export class LocationSimulation {
             gl_FragColor = vec4(vRainbow, 1.0);
           }
       `,
-      blending: AdditiveBlending,
-      // transparent: true,
+      // blending: AdditiveBlending,
+      transparent: true,
     });
     //
     let particles = new InstancedMesh(geoPt, matPt, this.width * this.height);
     particles.frustumCulled = false;
     particles.instanceMatrix.needsUpdate = true;
+    enableBloom(particles);
 
     this.mounter.add(particles);
     this.mini.onClean(() => {
@@ -260,7 +262,7 @@ export class LocationSimulation {
 
     let geoBall = new SphereBufferGeometry(1, 80, 80);
     let geoBox = new BoxBufferGeometry(1, 1, 1);
-    let matNormal = new MeshNormalMaterial({ opacity: 0.5, transparent: true });
+    let matNormal = new MeshNormalMaterial({ opacity: 0.3, transparent: true });
     let matStd = new MeshStandardMaterial({
       opacity: 1,
       transparent: true,
@@ -281,6 +283,7 @@ export class LocationSimulation {
       if (entry.type === "mouse-sphere") {
         let entryMesh = new Mesh(geoBall, matNormal);
         entryMesh.attach(ptLight);
+        enableBloom(entryMesh);
         this.o3d.add(entryMesh);
 
         this.mini.onLoop(() => {

@@ -45,6 +45,7 @@ export default function RainNoodle() {
             }
 
             setOK(true);
+            return;
           });
         }}
         dpr={dpr}

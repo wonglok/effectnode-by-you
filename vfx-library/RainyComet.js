@@ -16,6 +16,7 @@ import {
   AdditiveBlending,
 } from "three";
 import { Geometry } from "three/examples/jsm/deprecated/Geometry.js";
+import { enableBloom } from "./Bloomer";
 
 export class RainyComet {
   constructor({ mini, sim }) {
@@ -234,13 +235,13 @@ export class RainyComet {
 
           // vec4 matcapColor = texture2D( matcap, uv );
 
-          gl_FragColor = vec4(vRainbow, pow(1.0 - vT, 3.0));
+          gl_FragColor = vec4(vRainbow * vRainbow * 1.3, pow(1.0 - vT, 3.0));
 
         }
       `,
       transparent: true,
       depthTest: false,
-      blending: AdditiveBlending,
+      // blending: AdditiveBlending,
     });
 
     let line0 = new Mesh(geometry, matLine0);
@@ -251,7 +252,7 @@ export class RainyComet {
       1 / this.invertedScale
     );
 
-    // enableBloom(line0);
+    enableBloom(line0);
 
     this.o3d.add(line0);
     mini.onClean(() => {
