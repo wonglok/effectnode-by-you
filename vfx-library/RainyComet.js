@@ -236,7 +236,6 @@ export class RainyComet {
           // vec4 matcapColor = texture2D( matcap, uv );
 
           gl_FragColor = vec4(vRainbow * vRainbow * 1.3, pow(1.0 - vT, 3.0));
-
         }
       `,
       transparent: true,

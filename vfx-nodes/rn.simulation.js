@@ -179,7 +179,8 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 2.5);
+      pos.xz *= 5.0;
+      // pos.xyz = ballify(pos.xyz, 2.5);
       pos.y += 5.0;
       life = 0.99;
     }
@@ -193,7 +194,8 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 2.5);
+      pos.xz *= 5.0;
+      // pos.xyz = ballify(pos.xyz, 2.5);
       pos.y += 5.0;
       life = 1.1;
     }
