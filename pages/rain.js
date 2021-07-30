@@ -23,12 +23,14 @@ export default function RainNoodle() {
             // ipad
             if (v.gpu === "apple a9x gpu") {
               setDPR([1, 1]);
+              setOK(true);
               return;
             }
 
             //
             if (v.fps < 30) {
               setDPR([1, 1]);
+              setOK(true);
               return;
             }
 

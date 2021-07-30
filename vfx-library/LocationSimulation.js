@@ -43,11 +43,11 @@ export class LocationSimulation {
     this.viewport = viewport;
     this.o3d = new Object3D();
 
-    this.wait = Promise.all([
-      this.setup(),
-      this.particles(),
-      this.renderSpheres(),
-    ]);
+    this.setup();
+    this.particles();
+    this.sceneObjectRenders();
+
+    this.wait = Promise.resolve();
   }
 
   async setup() {
@@ -244,7 +244,7 @@ export class LocationSimulation {
     return this.outputSimTexture;
   }
 
-  renderSpheres() {
+  async sceneObjectRenders() {
     this.mounter.add(this.o3d);
     this.mini.onClean(() => {
       this.mounter.remove(this.o3d);
@@ -255,6 +255,9 @@ export class LocationSimulation {
       mouseNow.copy(this.cursor);
       mouseNow.z = 0;
     });
+
+    //
+
     let geoBall = new SphereBufferGeometry(1, 80, 80);
     let geoBox = new BoxBufferGeometry(1, 1, 1);
     let matNormal = new MeshNormalMaterial({ opacity: 0.5, transparent: true });

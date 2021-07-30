@@ -11,7 +11,9 @@ import { LocationSimulation } from "../vfx-library/LocationSimulation";
 import { RainyComet } from "../vfx-library/RainyComet";
 
 export async function effect({ mini, node }) {
+  console.log(123);
   let { ballify } = await node.in0.ready;
+  console.log(456);
 
   let collisionCode = ``;
 
@@ -164,8 +166,8 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 3.5);
-      pos.y += 6.0;
+      pos.xyz = ballify(pos.xyz, 1.5);
+      pos.y += 5.0;
       life = 0.99;
     }
 
@@ -178,8 +180,8 @@ export async function effect({ mini, node }) {
         -0.5 + rand(uv + 0.2),
         -0.5 + rand(uv + 0.3)
       );
-      pos.xyz = ballify(pos.xyz, 3.5);
-      pos.y += 6.0;
+      pos.xyz = ballify(pos.xyz, 1.5);
+      pos.y += 5.0;
       life = 1.1;
     }
 
