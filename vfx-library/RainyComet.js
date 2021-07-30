@@ -240,8 +240,8 @@ export class RainyComet {
         }
       `,
       transparent: true,
-      // depthTest: false,
-      // blending: AdditiveBlending,
+      depthTest: false,
+      blending: AdditiveBlending,
     });
 
     let line0 = new Mesh(geometry, matLine0);

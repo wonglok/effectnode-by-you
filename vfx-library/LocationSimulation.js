@@ -269,6 +269,7 @@ export class LocationSimulation {
       transparent: true,
       color: new Color("#888"),
     });
+
     let dirLight = new DirectionalLight(0xffffff, 1);
     this.o3d.add(dirLight);
     dirLight.position.x = 5;
