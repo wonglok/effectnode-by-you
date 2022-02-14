@@ -195,9 +195,16 @@ export const useAutoEvent = function (ev, fnc, target = () => {}) {
 };
 
 export async function getEffectNodeData(graphID) {
+  let detectSlash = "/";
+
+  if (
+    firebaseConfig.databaseURL[firebaseConfig.databaseURL.length - 1] === "/"
+  ) {
+    detectSlash = "";
+  }
   return axios({
     method: "GET",
-    url: `${firebaseConfig.databaseURL}canvas/${graphID}.json`,
+    url: `${firebaseConfig.databaseURL}${detectSlash}canvas/${graphID}.json`,
   }).then(
     (response) => {
       let ans = false;
