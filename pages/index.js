@@ -29,6 +29,9 @@ export default function Main() {
         <div className="text text-gray-600 underline">
           <Link href={"/rain"}>Make it rain! thank you Jesus ❤️</Link>
         </div>
+        <div className="text text-gray-600 underline">
+          <Link href={"/tryme"}>Make yours try me... ❤️</Link>
+        </div>
       </div>
     </div>
   );
